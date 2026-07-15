@@ -12,6 +12,7 @@ import { z, type ZodRawShape } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { BexioClient } from '../client/index.js';
 import { BexioApiError, BexioNetworkError, BexioRateLimitError } from '../client/errors.js';
+import { BexioOAuthError } from '../client/oauth.js';
 
 /** Functional tool groups, used to enable a subset of tools (`BEXIO_TOOL_GROUPS`). */
 export const TOOL_GROUPS = [
@@ -251,6 +252,12 @@ export function registerBexioTools(
           return isToolResult(result) ? result : toTextResult(result, maxChars);
         } catch (error) {
           if (error instanceof BexioApiError) return toolError(describeApiError(error));
+          if (error instanceof BexioOAuthError) {
+            return toolError(
+              `bexio authorization problem: ${error.message}` +
+                (error.needsReauthorization ? '\nRe-authorize with "bexio-mcp login", then retry.' : ''),
+            );
+          }
           if (error instanceof BexioNetworkError) {
             return toolError(`Could not reach the bexio API: ${error.message}`);
           }

@@ -1,6 +1,7 @@
 ﻿import { describe, expect, it, vi } from 'vitest';
 import { BexioHttp } from '../src/client/http.js';
 import { BexioApiError, BexioConfigError, BexioRateLimitError } from '../src/client/errors.js';
+import { BexioOAuthError } from '../src/client/oauth.js';
 
 function jsonResponse(body: unknown, init?: ResponseInit): Response {
   return new Response(JSON.stringify(body), {
@@ -125,6 +126,21 @@ describe('BexioHttp', () => {
     await expect(http.post('/2.0/contact', { body: {}, signal: controller.signal })).rejects.toThrow(
       /caller cancelled|Aborted/,
     );
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not retry token-provider failures and surfaces them unwrapped', async () => {
+    const fetchMock = vi.fn();
+    const authError = new BexioOAuthError('No stored bexio OAuth tokens. Run "bexio-mcp login" first.');
+    const http = new BexioHttp({
+      token: async () => {
+        throw authError;
+      },
+      fetch: fetchMock as typeof fetch,
+      maxRetries: 3,
+    });
+    const error = await http.get('/2.0/contact').catch((e: unknown) => e);
+    expect(error).toBe(authError); // unwrapped, not a BexioNetworkError
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

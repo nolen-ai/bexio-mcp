@@ -7,12 +7,18 @@ src/
 ├── client/                  Typed bexio API client — ZERO MCP dependencies.
 │   ├── http.ts              BexioHttp: fetch, auth, retries, rate limits, errors
 │   ├── errors.ts            BexioError hierarchy
+│   ├── oauth.ts             App workflow: BexioOAuth (PKCE, code exchange, rotating
+│   │                        refresh) + OAuthTokenProvider (auto-refresh token source)
 │   ├── types.ts             Shared types (SearchCriteria, ListParams, …)
 │   ├── resources/           One module per API domain (contacts.ts, quotes.ts, …)
 │   └── index.ts             BexioClient aggregating all resource APIs
+├── auth/                    Node-side OAuth companions (fs/http-bound).
+│   ├── token-store.ts       FileTokenStore (~/.bexio-mcp/tokens.json, atomic writes)
+│   └── login.ts             Loopback-browser authorization flow (bexio-mcp login)
 ├── mcp/                     MCP layer on top of the client.
 │   ├── registry.ts          Tool definition model + registration (filtering, errors, truncation)
 │   ├── binary.ts            documentResult() for PDF/file returning tools
+│   ├── scopes.ts            Tool group -> API scope map (drives default login scopes)
 │   ├── tools/               One module per API domain mirroring client/resources/
 │   └── index.ts             createBexioMcpServer()
 ├── config.ts                Env/CLI configuration
@@ -105,6 +111,22 @@ are retried with the server-reported reset time; transient network/5xx failures
 are retried for GETs only. The MCP registry converts these into readable tool
 errors with actionable hints (expired PAT, missing scope, validation details)
 instead of protocol failures.
+
+## Authentication
+
+Two token sources feed `BexioHttp`'s `token` option (a string or async provider):
+
+1. **Static token** (`BEXIO_API_TOKEN`): PAT or externally-managed OAuth access token.
+2. **App workflow**: `bexio-mcp login` runs the OIDC Authorization Code Flow against
+   `auth.bexio.com` (loopback redirect, state + PKCE S256, secrets only in the token
+   request body). Tokens persist via `FileTokenStore`; `OAuthTokenProvider` refreshes
+   single-flight 60 s before expiry and persists the **rotated** refresh token before
+   releasing the new access token (bexio invalidates the old one). `invalid_grant`
+   surfaces as "run bexio-mcp login again". Default login scopes derive from the
+   enabled tool groups via `mcp/scopes.ts` (write scopes dropped in read-only mode);
+   the spec-quirk scopes (`stock_edit` for stock reads, single `accounting` scope,
+   combined `file` scope) are encoded there. The pseudo-scope `general` is implicit
+   and never requested.
 
 ## bexio API conventions encoded here
 

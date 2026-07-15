@@ -9,9 +9,25 @@
 
 ## Quick start
 
-### 1. Get a token
+### 1. Choose an authentication method
 
-Create a **Personal Access Token** at [developer.bexio.com/pat](https://developer.bexio.com/pat) (sign in with your bexio account). PATs have full access to your company data and expire after six months. OAuth 2.0 access tokens from the [Authorization Code Flow](https://docs.bexio.com/#section/Authentication/Authorization-Code-Flow) work too.
+**Option A — Personal Access Token** (simplest, personal use): create a PAT at [developer.bexio.com/pat](https://developer.bexio.com/pat). PATs have full access to your company data and expire after six months. Set it as `BEXIO_API_TOKEN`.
+
+**Option B — App workflow** (OAuth 2.0 Authorization Code Flow, for apps and scoped access):
+
+1. Create an app at [developer.bexio.com](https://developer.bexio.com) and add
+   `http://127.0.0.1:33771/callback` to its **Allowed redirect URLs**.
+2. Reveal the **Client ID** and **Client Secret** under "App Details".
+3. Authorize once — a browser opens for the bexio consent screen:
+
+   ```bash
+   BEXIO_CLIENT_ID=… BEXIO_CLIENT_SECRET=… npx bexio-mcp login
+   ```
+
+   Requested scopes are derived from the enabled tool groups (write scopes are dropped in `--read-only` mode); override with `--scopes`. Tokens land in `~/.bexio-mcp/tokens.json` — treat that file like a password.
+4. Start the server with the same `BEXIO_CLIENT_ID`/`BEXIO_CLIENT_SECRET` env (no `BEXIO_API_TOKEN`): it uses the stored tokens and **auto-refreshes** them, persisting the rotated refresh token on every refresh. With `offline_access` the session stays valid as long as it refreshes at least once a year.
+
+`bexio-mcp whoami` prints the authenticated user; `bexio-mcp logout` deletes the stored tokens (and also revokes them at the identity provider when the app credentials are set).
 
 ### 2. Add the server to your MCP host
 
@@ -43,7 +59,13 @@ That's it — ask your model to "list open bexio invoices", "create a quote for 
 
 | Environment variable | CLI flag        | Description                                                                 |
 |----------------------|-----------------|-----------------------------------------------------------------------------|
-| `BEXIO_API_TOKEN`    | `--token`       | **Required.** PAT or OAuth access token.                                    |
+| `BEXIO_API_TOKEN`    | `--token`       | Static token (PAT or OAuth access token). Wins over the app workflow.       |
+| `BEXIO_CLIENT_ID`    | `--client-id`   | OAuth app client id (app workflow).                                         |
+| `BEXIO_CLIENT_SECRET`| `--client-secret`| OAuth app client secret (app workflow).                                    |
+| `BEXIO_SCOPES`       | `--scopes`      | Scopes for `login` (default: derived from tool groups).                     |
+| `BEXIO_REDIRECT_URI` | `--redirect-uri`| Loopback redirect URI (default `http://127.0.0.1:33771/callback`).          |
+| `BEXIO_TOKEN_STORE`  | `--token-store` | OAuth token file (default `~/.bexio-mcp/tokens.json`).                      |
+| `BEXIO_NO_BROWSER`   | `--no-browser`  | `login` prints the authorization URL instead of opening a browser.          |
 | `BEXIO_TOOL_GROUPS`  | `--groups`      | Comma-separated groups to enable (default: all). See groups below.          |
 | `BEXIO_READ_ONLY`    | `--read-only`   | `true` disables every write action (create/update/delete/issue/send/…).     |
 | `BEXIO_LANGUAGE`     | `--language`    | `Accept-Language` for translated fields (e.g. `de`, `fr`, `it`, `en`).      |
@@ -103,6 +125,17 @@ const bexio = new BexioClient({
   token: process.env.BEXIO_API_TOKEN!,   // string or async () => string
   language: 'de',
 });
+```
+
+The OAuth building blocks are exported too — `BexioOAuth` (authorization URL with PKCE, code exchange, refresh with rotation) and `OAuthTokenProvider` (auto-refreshing token source) from `bexio-mcp/client`, plus `FileTokenStore` and `runLoginFlow` from `bexio-mcp`:
+
+```ts
+import { BexioClient, BexioOAuth, OAuthTokenProvider } from 'bexio-mcp/client';
+import { FileTokenStore } from 'bexio-mcp';
+
+const oauth = new BexioOAuth({ clientId, clientSecret });
+const provider = new OAuthTokenProvider(oauth, new FileTokenStore());
+const bexio = new BexioClient({ token: provider.accessTokenProvider() });
 
 // Typed resource APIs mirroring the bexio docs
 const contacts = await bexio.contacts.search([{ field: 'name_1', value: 'Muster' }]);

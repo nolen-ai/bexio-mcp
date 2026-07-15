@@ -40,9 +40,29 @@ describe('parseCliConfig', () => {
     expect(parseCliConfig(['--timeout-ms', 'abc'], noEnv).error).toContain('abc');
   });
 
-  it('handles help/version/list-tools switches', () => {
+  it('handles help/version/list-tools switches, including inline false values', () => {
     expect(parseCliConfig(['--help'], noEnv).help).toBe(true);
     expect(parseCliConfig(['-v'], noEnv).version).toBe(true);
     expect(parseCliConfig(['--list-tools'], { BEXIO_API_TOKEN: 't' } as NodeJS.ProcessEnv).listTools).toBe(true);
+    expect(parseCliConfig(['--list-tools=false'], { BEXIO_API_TOKEN: 't' } as NodeJS.ProcessEnv).listTools).toBe(false);
+    expect(parseCliConfig(['--help=false'], noEnv).help).toBeUndefined();
+  });
+
+  it('parses subcommands and OAuth options', () => {
+    const parsed = parseCliConfig(
+      ['login', '--client-id', 'cid', '--client-secret', 'sec', '--scopes', 'openid contact_show', '--no-browser'],
+      noEnv,
+    );
+    expect(parsed.command).toBe('login');
+    expect(parsed.config).toMatchObject({
+      clientId: 'cid',
+      clientSecret: 'sec',
+      scopes: ['openid', 'contact_show'],
+      noBrowser: true,
+    });
+    expect(parseCliConfig([], noEnv).command).toBe('serve');
+    expect(parseCliConfig(['--no-browser=false'], { BEXIO_NO_BROWSER: 'true' } as NodeJS.ProcessEnv).config?.noBrowser).toBe(false);
+    expect(parseCliConfig([], { BEXIO_NO_BROWSER: '1' } as NodeJS.ProcessEnv).config?.noBrowser).toBe(true);
+    expect(parseCliConfig(['frobnicate'], noEnv).error).toContain('frobnicate');
   });
 });

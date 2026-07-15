@@ -120,6 +120,7 @@ export class BexioClient {
 export { BexioHttp } from './http.js';
 export type { BexioHttpOptions, RequestOptions, TokenProvider } from './http.js';
 export * from './errors.js';
+export * from './oauth.js';
 export * from './types.js';
 export * from './resources/accounting-entries.js';
 export * from './resources/accounting-core.js';

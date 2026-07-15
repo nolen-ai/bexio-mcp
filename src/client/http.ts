@@ -8,6 +8,7 @@
 import {
   BexioApiError,
   BexioConfigError,
+  BexioError,
   BexioNetworkError,
   BexioRateLimitError,
   parseErrorBody,
@@ -168,6 +169,10 @@ export class BexioHttp {
       try {
         response = await this.send(method, url, options);
       } catch (error) {
+        // Failures of the token provider or configuration are not transport
+        // errors: retrying cannot help, and wrapping would bury the message
+        // (e.g. "run bexio-mcp login again").
+        if (error instanceof BexioError && !(error instanceof BexioNetworkError)) throw error;
         lastError = error;
         // Timeouts/network failures: retry only idempotent requests.
         if (method === 'GET' && attempt < maxAttempts) {
