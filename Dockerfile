@@ -16,10 +16,11 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+# --ignore-scripts: the prepare script (tsup) must not run before src/ is copied
+RUN npm ci --ignore-scripts
 COPY tsconfig.json tsup.config.ts ./
 COPY src ./src
-RUN npm run build && npm prune --omit=dev
+RUN npm run build && npm prune --omit=dev --ignore-scripts
 
 FROM node:22-alpine
 # Note: the shared-identity gate stays CLOSED by default — set
