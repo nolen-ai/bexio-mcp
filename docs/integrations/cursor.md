@@ -1,0 +1,82 @@
+# Cursor
+
+Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to Cursor so the AI in your editor can work with your bexio contacts, invoices, projects and more.
+
+## Prerequisites
+
+- Node.js 18+ (for the stdio setup) or Docker (for the HTTP setup)
+- A bexio Personal Access Token from <https://developer.bexio.com/pat> (full account access, expires after 6 months)
+- Cursor with MCP support enabled
+
+## Setup (stdio, recommended)
+
+Cursor reads MCP servers from `~/.cursor/mcp.json` (global, all projects) or `.cursor/mcp.json` in your project root. Add:
+
+```json
+{
+  "mcpServers": {
+    "bexio": {
+      "command": "npx",
+      "args": ["-y", "github:mydata-ag/bexio-mcp"],
+      "env": {
+        "BEXIO_API_TOKEN": "your-bexio-token"
+      }
+    }
+  }
+}
+```
+
+Reload Cursor (or toggle the server in **Settings → MCP**) and the bexio tools appear.
+
+Once the package is published on npm you will be able to use `"args": ["-y", "bexio-mcp"]` instead; the GitHub form above works today. To avoid committing your token to a project config, use Cursor's interpolation: `"BEXIO_API_TOKEN": "${env:BEXIO_API_TOKEN}"`.
+
+Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+
+## Setup (HTTP via Docker)
+
+Run the server with Docker (streamable HTTP transport on port 8722, path `/mcp`). With no token in the container it runs in multi-user mode — each client authenticates per request with its own bexio token:
+
+```bash
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+```
+
+Point Cursor at it in `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "bexio": {
+      "url": "http://127.0.0.1:8722/mcp",
+      "headers": {
+        "Authorization": "Bearer your-bexio-token"
+      }
+    }
+  }
+}
+```
+
+Health check: `curl http://127.0.0.1:8722/healthz`.
+
+Alternatively, configure a single shared identity on the server and drop the `headers` block from the client config:
+
+```bash
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+```
+
+> **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.
+
+## Try it
+
+Ask Cursor's chat things like:
+
+- "List my 10 most recent open invoices" (uses `bexio_invoices`)
+- "Create a quote for Muster AG with two positions" (uses `bexio_quotes`)
+- "How many hours were tracked on project X this month?" (uses `bexio_timesheets`)
+
+## Tips
+
+- **Read-only mode**: add `"BEXIO_READ_ONLY": "true"` to `env` to disable all write actions — a good default while exploring.
+- **Trim tool groups**: 35 tools use context; keep only what you need, e.g. `"BEXIO_TOOL_GROUPS": "contacts,sales"`. Available groups: contacts, sales, purchase, accounting, banking, items, projects, files, payroll, misc.
+- **Language**: set `"BEXIO_LANGUAGE": "de"` (or `fr`, `it`, `en`) for localized results.
+
+Full configuration reference: [main README](../../README.md). Other integrations: [guide index](./README.md).

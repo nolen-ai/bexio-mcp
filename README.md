@@ -55,6 +55,8 @@ claude mcp add bexio --env BEXIO_API_TOKEN=<your-token> -- npx -y bexio-mcp
 
 That's it — ask your model to "list open bexio invoices", "create a quote for Muster AG", or "how many hours were tracked on project X this month?".
 
+Using something else? There are copy-paste quick-starts for **Cursor, VS Code, Windsurf, Gemini CLI, Codex CLI, Pi, Agno, OpenAI Agents SDK, Pydantic AI, LangChain/LangGraph, n8n, the Claude Agent SDK** and more in [docs/integrations](docs/integrations/README.md).
+
 ## Configuration
 
 | Environment variable | CLI flag        | Description                                                                 |
