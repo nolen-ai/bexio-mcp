@@ -1,0 +1,1862 @@
+[
+ {
+  "id": "deleteAbsence",
+  "method": "DELETE",
+  "path": "/4.0/payroll/employees/{employeeId}/absences/{absenceId}",
+  "tag": "Absences"
+ },
+ {
+  "id": "getEmployeeAbsenceInYear",
+  "method": "GET",
+  "path": "/4.0/payroll/employees/{employeeId}/absences",
+  "tag": "Absences"
+ },
+ {
+  "id": "getAbsence",
+  "method": "GET",
+  "path": "/4.0/payroll/employees/{employeeId}/absences/{absenceId}",
+  "tag": "Absences"
+ },
+ {
+  "id": "createAbsenceForEmployee",
+  "method": "POST",
+  "path": "/4.0/payroll/employees/{employeeId}/absences",
+  "tag": "Absences"
+ },
+ {
+  "id": "updateAbsence",
+  "method": "PUT",
+  "path": "/4.0/payroll/employees/{employeeId}/absences/{absenceId}",
+  "tag": "Absences"
+ },
+ {
+  "id": "v2ListAccountGroups",
+  "method": "GET",
+  "path": "/2.0/account_groups",
+  "tag": "Account Groups"
+ },
+ {
+  "id": "v2ListAccounts",
+  "method": "GET",
+  "path": "/2.0/accounts",
+  "tag": "Accounts"
+ },
+ {
+  "id": "v2SearchAccounts",
+  "method": "POST",
+  "path": "/2.0/accounts/search",
+  "tag": "Accounts"
+ },
+ {
+  "id": "v2DeleteAdditionalAddress",
+  "method": "DELETE",
+  "path": "/2.0/contact/{contact_id}/additional_address/{additional_address_id}",
+  "tag": "Additional Addresses"
+ },
+ {
+  "id": "v2ListAdditionalAddresses",
+  "method": "GET",
+  "path": "/2.0/contact/{contact_id}/additional_address",
+  "tag": "Additional Addresses"
+ },
+ {
+  "id": "v2ShowAdditionalAddress",
+  "method": "GET",
+  "path": "/2.0/contact/{contact_id}/additional_address/{additional_address_id}",
+  "tag": "Additional Addresses"
+ },
+ {
+  "id": "v2CreateAdditionalAddress",
+  "method": "POST",
+  "path": "/2.0/contact/{contact_id}/additional_address",
+  "tag": "Additional Addresses"
+ },
+ {
+  "id": "v2SearchAdditionalAddresses",
+  "method": "POST",
+  "path": "/2.0/contact/{contact_id}/additional_address/search",
+  "tag": "Additional Addresses"
+ },
+ {
+  "id": "v2EditAdditionalAddress",
+  "method": "POST",
+  "path": "/2.0/contact/{contact_id}/additional_address/{additional_address_id}",
+  "tag": "Additional Addresses"
+ },
+ {
+  "id": "ListBankAccounts",
+  "method": "GET",
+  "path": "/3.0/banking/accounts",
+  "tag": "Bank Accounts"
+ },
+ {
+  "id": "ShowBankAccount",
+  "method": "GET",
+  "path": "/3.0/banking/accounts/{bank_account_id}",
+  "tag": "Bank Accounts"
+ },
+ {
+  "id": "ApiBills_DELETE",
+  "method": "DELETE",
+  "path": "/4.0/purchase/bills/{id}",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiBillsList_GET",
+  "method": "GET",
+  "path": "/4.0/purchase/bills",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiBills_GET",
+  "method": "GET",
+  "path": "/4.0/purchase/bills/{id}",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiPurchaseDocumentNumbers_GET",
+  "method": "GET",
+  "path": "/4.0/purchase/documentnumbers/bills",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiBills_POST",
+  "method": "POST",
+  "path": "/4.0/purchase/bills",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiBillActions_POST",
+  "method": "POST",
+  "path": "/4.0/purchase/bills/{id}/actions",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiBills_PUT",
+  "method": "PUT",
+  "path": "/4.0/purchase/bills/{id}",
+  "tag": "Bills"
+ },
+ {
+  "id": "ApiBillBookings_PUT",
+  "method": "PUT",
+  "path": "/4.0/purchase/bills/{id}/bookings/{status}",
+  "tag": "Bills"
+ },
+ {
+  "id": "v2ListBusinessActivities",
+  "method": "GET",
+  "path": "/2.0/client_service",
+  "tag": "Business Activities"
+ },
+ {
+  "id": "v2CreateBusinessActivity",
+  "method": "POST",
+  "path": "/2.0/client_service",
+  "tag": "Business Activities"
+ },
+ {
+  "id": "v2SearchBusinessActivities",
+  "method": "POST",
+  "path": "/2.0/client_service/search",
+  "tag": "Business Activities"
+ },
+ {
+  "id": "ListBusinessYears",
+  "method": "GET",
+  "path": "/3.0/accounting/business_years",
+  "tag": "Business Years"
+ },
+ {
+  "id": "ShowBusinessYear",
+  "method": "GET",
+  "path": "/3.0/accounting/business_years/{business_year_id}",
+  "tag": "Business Years"
+ },
+ {
+  "id": "ListCalendarYears",
+  "method": "GET",
+  "path": "/3.0/accounting/calendar_years",
+  "tag": "Calendar Years"
+ },
+ {
+  "id": "ShowCalendarYear",
+  "method": "GET",
+  "path": "/3.0/accounting/calendar_years/{calendar_year_id}",
+  "tag": "Calendar Years"
+ },
+ {
+  "id": "CreateCalendarYear",
+  "method": "POST",
+  "path": "/3.0/accounting/calendar_years",
+  "tag": "Calendar Years"
+ },
+ {
+  "id": "SearchCalendarYears",
+  "method": "POST",
+  "path": "/3.0/accounting/calendar_years/search",
+  "tag": "Calendar Years"
+ },
+ {
+  "id": "v2ListComments",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/comment",
+  "tag": "Comments"
+ },
+ {
+  "id": "v2ShowComment",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/comment/{comment_id}",
+  "tag": "Comments"
+ },
+ {
+  "id": "v2CreateComment",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/comment",
+  "tag": "Comments"
+ },
+ {
+  "id": "v2ListCommunicationTypes",
+  "method": "GET",
+  "path": "/2.0/communication_kind",
+  "tag": "Communication Types"
+ },
+ {
+  "id": "v2SearchCommunicationTypes",
+  "method": "POST",
+  "path": "/2.0/communication_kind/search",
+  "tag": "Communication Types"
+ },
+ {
+  "id": "v2ListCompanyProfile",
+  "method": "GET",
+  "path": "/2.0/company_profile",
+  "tag": "Company Profile"
+ },
+ {
+  "id": "v2ShowCompanyProfile",
+  "method": "GET",
+  "path": "/2.0/company_profile/{profile_id}",
+  "tag": "Company Profile"
+ },
+ {
+  "id": "v2DeleteContactGroup",
+  "method": "DELETE",
+  "path": "/2.0/contact_group/{contact_group_id}",
+  "tag": "Contact Groups"
+ },
+ {
+  "id": "v2ListContactGroups",
+  "method": "GET",
+  "path": "/2.0/contact_group",
+  "tag": "Contact Groups"
+ },
+ {
+  "id": "v2ShowContactGroup",
+  "method": "GET",
+  "path": "/2.0/contact_group/{contact_group_id}",
+  "tag": "Contact Groups"
+ },
+ {
+  "id": "v2CreateContactGroup",
+  "method": "POST",
+  "path": "/2.0/contact_group",
+  "tag": "Contact Groups"
+ },
+ {
+  "id": "v2SearchContactGroups",
+  "method": "POST",
+  "path": "/2.0/contact_group/search",
+  "tag": "Contact Groups"
+ },
+ {
+  "id": "v2EditContactGroup",
+  "method": "POST",
+  "path": "/2.0/contact_group/{contact_group_id}",
+  "tag": "Contact Groups"
+ },
+ {
+  "id": "v2DeleteContactRelation",
+  "method": "DELETE",
+  "path": "/2.0/contact_relation/{contact_relation_id}",
+  "tag": "Contact Relations"
+ },
+ {
+  "id": "v2ListContactRelations",
+  "method": "GET",
+  "path": "/2.0/contact_relation",
+  "tag": "Contact Relations"
+ },
+ {
+  "id": "v2ShowContactRelation",
+  "method": "GET",
+  "path": "/2.0/contact_relation/{contact_relation_id}",
+  "tag": "Contact Relations"
+ },
+ {
+  "id": "v2CreateContactRelation",
+  "method": "POST",
+  "path": "/2.0/contact_relation",
+  "tag": "Contact Relations"
+ },
+ {
+  "id": "v2SearchContactRelations",
+  "method": "POST",
+  "path": "/2.0/contact_relation/search",
+  "tag": "Contact Relations"
+ },
+ {
+  "id": "v2EditContactRelation",
+  "method": "POST",
+  "path": "/2.0/contact_relation/{contact_relation_id}",
+  "tag": "Contact Relations"
+ },
+ {
+  "id": "v2ListContactSectors",
+  "method": "GET",
+  "path": "/2.0/contact_branch",
+  "tag": "Contact Sectors"
+ },
+ {
+  "id": "v2SearchContactSectors",
+  "method": "POST",
+  "path": "/2.0/contact_branch/search",
+  "tag": "Contact Sectors"
+ },
+ {
+  "id": "v2DeleteContact",
+  "method": "DELETE",
+  "path": "/2.0/contact/{contact_id}",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2ListContacts",
+  "method": "GET",
+  "path": "/2.0/contact",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2ShowContact",
+  "method": "GET",
+  "path": "/2.0/contact/{contact_id}",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2RestoreContact",
+  "method": "PATCH",
+  "path": "/2.0/contact/{contact_id}/restore",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2CreateContact",
+  "method": "POST",
+  "path": "/2.0/contact",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2BulkCreateContacts",
+  "method": "POST",
+  "path": "/2.0/contact/_bulk_create",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2SearchContact",
+  "method": "POST",
+  "path": "/2.0/contact/search",
+  "tag": "Contacts"
+ },
+ {
+  "id": "v2EditContact",
+  "method": "POST",
+  "path": "/2.0/contact/{contact_id}",
+  "tag": "Contacts"
+ },
+ {
+  "id": "DeleteCountry",
+  "method": "DELETE",
+  "path": "/2.0/country/{country_id}",
+  "tag": "Countries"
+ },
+ {
+  "id": "v2ListCountries",
+  "method": "GET",
+  "path": "/2.0/country",
+  "tag": "Countries"
+ },
+ {
+  "id": "v2ShowCountry",
+  "method": "GET",
+  "path": "/2.0/country/{country_id}",
+  "tag": "Countries"
+ },
+ {
+  "id": "v2CreateCountry",
+  "method": "POST",
+  "path": "/2.0/country",
+  "tag": "Countries"
+ },
+ {
+  "id": "v2SearchCountries",
+  "method": "POST",
+  "path": "/2.0/country/search",
+  "tag": "Countries"
+ },
+ {
+  "id": "v2EditCountry",
+  "method": "POST",
+  "path": "/2.0/country/{country_id}",
+  "tag": "Countries"
+ },
+ {
+  "id": "DeleteCurrency",
+  "method": "DELETE",
+  "path": "/3.0/currencies/{currency_id}",
+  "tag": "Currencies"
+ },
+ {
+  "id": "ListCurrencies",
+  "method": "GET",
+  "path": "/3.0/currencies",
+  "tag": "Currencies"
+ },
+ {
+  "id": "ListCurrenciesCodes",
+  "method": "GET",
+  "path": "/3.0/currencies/codes",
+  "tag": "Currencies"
+ },
+ {
+  "id": "ShowCurrency",
+  "method": "GET",
+  "path": "/3.0/currencies/{currency_id}",
+  "tag": "Currencies"
+ },
+ {
+  "id": "ListExchangeRatesForCurrency",
+  "method": "GET",
+  "path": "/3.0/currencies/{currency_id}/exchange_rates",
+  "tag": "Currencies"
+ },
+ {
+  "id": "UpdateCurrency",
+  "method": "PATCH",
+  "path": "/3.0/currencies/{currency_id}",
+  "tag": "Currencies"
+ },
+ {
+  "id": "CreateCurrency",
+  "method": "POST",
+  "path": "/3.0/currencies",
+  "tag": "Currencies"
+ },
+ {
+  "id": "v2DeleteDefaultPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_custom/{position_id}",
+  "tag": "Default positions"
+ },
+ {
+  "id": "v2ListDefaultPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_custom",
+  "tag": "Default positions"
+ },
+ {
+  "id": "v2ShowDefaultPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_custom/{position_id}",
+  "tag": "Default positions"
+ },
+ {
+  "id": "v2CreateDefaultPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_custom",
+  "tag": "Default positions"
+ },
+ {
+  "id": "v2EditDefaultPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_custom/{position_id}",
+  "tag": "Default positions"
+ },
+ {
+  "id": "v2ListDeliveries",
+  "method": "GET",
+  "path": "/2.0/kb_delivery",
+  "tag": "Deliveries"
+ },
+ {
+  "id": "v2ShowDelivery",
+  "method": "GET",
+  "path": "/2.0/kb_delivery/{delivery_id}",
+  "tag": "Deliveries"
+ },
+ {
+  "id": "v2IssueDelivery",
+  "method": "POST",
+  "path": "/2.0/kb_delivery/{delivery_id}/issue",
+  "tag": "Deliveries"
+ },
+ {
+  "id": "v2DeleteDiscountPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_discount/{position_id}",
+  "tag": "Discount positions"
+ },
+ {
+  "id": "v2ListDiscountPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_discount",
+  "tag": "Discount positions"
+ },
+ {
+  "id": "v2ShowDiscountPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_discount/{position_id}",
+  "tag": "Discount positions"
+ },
+ {
+  "id": "v2CreateDiscountPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_discount",
+  "tag": "Discount positions"
+ },
+ {
+  "id": "v2EditDiscountPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_discount/{position_id}",
+  "tag": "Discount positions"
+ },
+ {
+  "id": "v2ListDocumentSettings",
+  "method": "GET",
+  "path": "/2.0/kb_item_setting",
+  "tag": "Document Settings"
+ },
+ {
+  "id": "v3ListDocumentTemplate",
+  "method": "GET",
+  "path": "/3.0/document_templates",
+  "tag": "Document templates"
+ },
+ {
+  "id": "downloadPaystubPdf",
+  "method": "GET",
+  "path": "/4.0/payroll/employees/{employeeId}/paystub-pdf-download/{year}/{month}",
+  "tag": "Documents"
+ },
+ {
+  "id": "getPdfForEmployeeInMonth",
+  "method": "GET",
+  "path": "/4.0/payroll/employees/{employeeId}/paystub-pdf/{year}/{month}",
+  "tag": "Documents"
+ },
+ {
+  "id": "getEmployees",
+  "method": "GET",
+  "path": "/4.0/payroll/employees",
+  "tag": "Employees"
+ },
+ {
+  "id": "getEmployeeOnDate",
+  "method": "GET",
+  "path": "/4.0/payroll/employees/{employeeId}",
+  "tag": "Employees"
+ },
+ {
+  "id": "updateEmployee",
+  "method": "PATCH",
+  "path": "/4.0/payroll/employees/{employeeId}",
+  "tag": "Employees"
+ },
+ {
+  "id": "createEmployee",
+  "method": "POST",
+  "path": "/4.0/payroll/employees",
+  "tag": "Employees"
+ },
+ {
+  "id": "ApiExpenses_DELETE",
+  "method": "DELETE",
+  "path": "/4.0/expenses/{id}",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpensesList_GET",
+  "method": "GET",
+  "path": "/4.0/expenses",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpenseDocumentNumbers_GET",
+  "method": "GET",
+  "path": "/4.0/expenses/documentnumbers",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpenses_GET",
+  "method": "GET",
+  "path": "/4.0/expenses/{id}",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpenses_POST",
+  "method": "POST",
+  "path": "/4.0/expenses",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpenseActions_POST",
+  "method": "POST",
+  "path": "/4.0/expenses/{id}/actions",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpenses_PUT",
+  "method": "PUT",
+  "path": "/4.0/expenses/{id}",
+  "tag": "Expenses"
+ },
+ {
+  "id": "ApiExpenseBookings_PUT",
+  "method": "PUT",
+  "path": "/4.0/expenses/{id}/bookings/{status}",
+  "tag": "Expenses"
+ },
+ {
+  "id": "v3DeleteFile",
+  "method": "DELETE",
+  "path": "/3.0/files/{file_id}",
+  "tag": "Files"
+ },
+ {
+  "id": "v3ReadFiles",
+  "method": "GET",
+  "path": "/3.0/files",
+  "tag": "Files"
+ },
+ {
+  "id": "v3ReadFile",
+  "method": "GET",
+  "path": "/3.0/files/{file_id}",
+  "tag": "Files"
+ },
+ {
+  "id": "v3DownloadFile",
+  "method": "GET",
+  "path": "/3.0/files/{file_id}/download",
+  "tag": "Files"
+ },
+ {
+  "id": "v3PreviewFile",
+  "method": "GET",
+  "path": "/3.0/files/{file_id}/preview",
+  "tag": "Files"
+ },
+ {
+  "id": "v3ShowFile",
+  "method": "GET",
+  "path": "/3.0/files/{file_id}/usage",
+  "tag": "Files"
+ },
+ {
+  "id": "v3UpdateFile",
+  "method": "PATCH",
+  "path": "/3.0/files/{file_id}",
+  "tag": "Files"
+ },
+ {
+  "id": "v3CreateFile",
+  "method": "POST",
+  "path": "/3.0/files",
+  "tag": "Files"
+ },
+ {
+  "id": "v3SearchFile",
+  "method": "POST",
+  "path": "/3.0/files/search",
+  "tag": "Files"
+ },
+ {
+  "id": "DeleteInvoice",
+  "method": "DELETE",
+  "path": "/2.0/kb_invoice/{invoice_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2DeleteInvoiceReminder",
+  "method": "DELETE",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/{reminder_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "DeleteInvoicePayment",
+  "method": "DELETE",
+  "path": "/2.0/kb_invoice/{invoice_id}/payment/{payment_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ListInvoices",
+  "method": "GET",
+  "path": "/2.0/kb_invoice",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ShowInvoice",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ListInvoiceReminders",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ShowInvoiceReminder",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/{reminder_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ShowInvoiceReminderPDF",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/{reminder_id}/pdf",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ListInvoicePayments",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}/payment",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ShowInvoicePayment",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}/payment/{payment_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2ShowInvoicePDF",
+  "method": "GET",
+  "path": "/2.0/kb_invoice/{invoice_id}/pdf",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2CreateInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2SearchInvoices",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/search",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2EditInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2CancelInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/cancel",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2CopyInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/copy",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2IssueInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/issue",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2CreateInvoiceReminder",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2SearchReminders",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/search",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2RMarkAsSentInvoiceReminder",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/{reminder_id}/mark_as_sent",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2RMarkAsUnsentInvoiceReminder",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/{reminder_id}/mark_as_unsent",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2SendInvoiceReminder",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/kb_reminder/{reminder_id}/send",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2RMarkAsSentInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/mark_as_sent",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2CreateInvoicePayment",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/payment",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2RevertIssueInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/revert_issue",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2SendInvoice",
+  "method": "POST",
+  "path": "/2.0/kb_invoice/{invoice_id}/send",
+  "tag": "Invoices"
+ },
+ {
+  "id": "v2DeleteItemPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_article/{position_id}",
+  "tag": "Item positions"
+ },
+ {
+  "id": "v2ListItemPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_article",
+  "tag": "Item positions"
+ },
+ {
+  "id": "v2ShowItemPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_article/{position_id}",
+  "tag": "Item positions"
+ },
+ {
+  "id": "v2CreateItemPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_article",
+  "tag": "Item positions"
+ },
+ {
+  "id": "v2EditItemPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_article/{position_id}",
+  "tag": "Item positions"
+ },
+ {
+  "id": "DeleteItem",
+  "method": "DELETE",
+  "path": "/2.0/article/{article_id}",
+  "tag": "Items"
+ },
+ {
+  "id": "v2ListItems",
+  "method": "GET",
+  "path": "/2.0/article",
+  "tag": "Items"
+ },
+ {
+  "id": "v2ShowItem",
+  "method": "GET",
+  "path": "/2.0/article/{article_id}",
+  "tag": "Items"
+ },
+ {
+  "id": "v2CreateItem",
+  "method": "POST",
+  "path": "/2.0/article",
+  "tag": "Items"
+ },
+ {
+  "id": "v2SearchItems",
+  "method": "POST",
+  "path": "/2.0/article/search",
+  "tag": "Items"
+ },
+ {
+  "id": "v2EditItem",
+  "method": "POST",
+  "path": "/2.0/article/{article_id}",
+  "tag": "Items"
+ },
+ {
+  "id": "v2ListLanguages",
+  "method": "GET",
+  "path": "/2.0/language",
+  "tag": "Languages"
+ },
+ {
+  "id": "v2SearchLanguages",
+  "method": "POST",
+  "path": "/2.0/language/search",
+  "tag": "Languages"
+ },
+ {
+  "id": "DeleteManualEntry",
+  "method": "DELETE",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "DeleteManualEntryFile",
+  "method": "DELETE",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/entries/{entry_id}/files/{file_id}",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "DeleteManualCompoundEntryFile",
+  "method": "DELETE",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/files/{file_id}",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "ListManualEntries",
+  "method": "GET",
+  "path": "/3.0/accounting/manual_entries",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "GetNextReferenceNumber",
+  "method": "GET",
+  "path": "/3.0/accounting/manual_entries/next_ref_nr",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "ListManualEntryFiles",
+  "method": "GET",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/entries/{entry_id}/files",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "ShowManualEntryFile",
+  "method": "GET",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/entries/{entry_id}/files/{file_id}",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "ListManualCompoundEntryFiles",
+  "method": "GET",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/files",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "ShowManualCompoundEntryFile",
+  "method": "GET",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/files/{file_id}",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "CreateManualEntry",
+  "method": "POST",
+  "path": "/3.0/accounting/manual_entries",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "UploadManualEntryFile",
+  "method": "POST",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/entries/{entry_id}/files",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "UploadManualCompoundEntryFile",
+  "method": "POST",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}/files",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "UpdateManualEntry",
+  "method": "PUT",
+  "path": "/3.0/accounting/manual_entries/{manual_entry_id}",
+  "tag": "Manual Entries"
+ },
+ {
+  "id": "DeleteNote",
+  "method": "DELETE",
+  "path": "/2.0/note/{note_id}",
+  "tag": "Notes"
+ },
+ {
+  "id": "v2ListNotes",
+  "method": "GET",
+  "path": "/2.0/note",
+  "tag": "Notes"
+ },
+ {
+  "id": "v2ShowNote",
+  "method": "GET",
+  "path": "/2.0/note/{note_id}",
+  "tag": "Notes"
+ },
+ {
+  "id": "v2CreateNote",
+  "method": "POST",
+  "path": "/2.0/note",
+  "tag": "Notes"
+ },
+ {
+  "id": "v2SearchNotes",
+  "method": "POST",
+  "path": "/2.0/note/search",
+  "tag": "Notes"
+ },
+ {
+  "id": "v2EditNote",
+  "method": "POST",
+  "path": "/2.0/note/{note_id}",
+  "tag": "Notes"
+ },
+ {
+  "id": "DeleteOrder",
+  "method": "DELETE",
+  "path": "/2.0/kb_order/{order_id}",
+  "tag": "Orders"
+ },
+ {
+  "id": "DeleteOrderRepetition",
+  "method": "DELETE",
+  "path": "/2.0/kb_order/{order_id}/repetition",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2ListOrders",
+  "method": "GET",
+  "path": "/2.0/kb_order",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2ShowOrder",
+  "method": "GET",
+  "path": "/2.0/kb_order/{order_id}",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2ShowOrderPDF",
+  "method": "GET",
+  "path": "/2.0/kb_order/{order_id}/pdf",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2ShowOrderRepetition",
+  "method": "GET",
+  "path": "/2.0/kb_order/{order_id}/repetition",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2CreateOrder",
+  "method": "POST",
+  "path": "/2.0/kb_order",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2SearchOrders",
+  "method": "POST",
+  "path": "/2.0/kb_order/search",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2EditOrder",
+  "method": "POST",
+  "path": "/2.0/kb_order/{order_id}",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2CreateDeliveryFromOrder",
+  "method": "POST",
+  "path": "/2.0/kb_order/{order_id}/delivery",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2CreateInvoiceFromOrder",
+  "method": "POST",
+  "path": "/2.0/kb_order/{order_id}/invoice",
+  "tag": "Orders"
+ },
+ {
+  "id": "v2EditOrderRepetition",
+  "method": "POST",
+  "path": "/2.0/kb_order/{order_id}/repetition",
+  "tag": "Orders"
+ },
+ {
+  "id": "ApiOutgoingPayment_DELETE",
+  "method": "DELETE",
+  "path": "/4.0/purchase/outgoing-payments/{id}",
+  "tag": "Outgoing Payment"
+ },
+ {
+  "id": "ApiOutgoingPaymentList_GET",
+  "method": "GET",
+  "path": "/4.0/purchase/outgoing-payments",
+  "tag": "Outgoing Payment"
+ },
+ {
+  "id": "ApiOutgoingPayment_GET",
+  "method": "GET",
+  "path": "/4.0/purchase/outgoing-payments/{id}",
+  "tag": "Outgoing Payment"
+ },
+ {
+  "id": "ApiOutgoingPayment_POST",
+  "method": "POST",
+  "path": "/4.0/purchase/outgoing-payments",
+  "tag": "Outgoing Payment"
+ },
+ {
+  "id": "ApiOutgoingPayment_PUT",
+  "method": "PUT",
+  "path": "/4.0/purchase/outgoing-payments",
+  "tag": "Outgoing Payment"
+ },
+ {
+  "id": "v2DeletePagebreakPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_pagebreak/{position_id}",
+  "tag": "Pagebreak positions"
+ },
+ {
+  "id": "v2ListPagebreakPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_pagebreak",
+  "tag": "Pagebreak positions"
+ },
+ {
+  "id": "v2ShowPagebreakPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_pagebreak/{position_id}",
+  "tag": "Pagebreak positions"
+ },
+ {
+  "id": "v2CreatePagebreakPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_pagebreak",
+  "tag": "Pagebreak positions"
+ },
+ {
+  "id": "v2EditPagebreakPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_pagebreak/{position_id}",
+  "tag": "Pagebreak positions"
+ },
+ {
+  "id": "v2ListPaymentTypes",
+  "method": "GET",
+  "path": "/2.0/payment_type",
+  "tag": "Payment Types"
+ },
+ {
+  "id": "v2SearchPaymentTypes",
+  "method": "POST",
+  "path": "/2.0/payment_type/search",
+  "tag": "Payment Types"
+ },
+ {
+  "id": "NewDeletePayment",
+  "method": "DELETE",
+  "path": "/4.0/banking/payments/{payment_id}",
+  "tag": "Payments"
+ },
+ {
+  "id": "NewFetchAllPayments",
+  "method": "GET",
+  "path": "/4.0/banking/payments",
+  "tag": "Payments"
+ },
+ {
+  "id": "NewGetPayment",
+  "method": "GET",
+  "path": "/4.0/banking/payments/{payment_id}",
+  "tag": "Payments"
+ },
+ {
+  "id": "NewCreatePayment",
+  "method": "POST",
+  "path": "/4.0/banking/payments",
+  "tag": "Payments"
+ },
+ {
+  "id": "NewCancelPayment",
+  "method": "POST",
+  "path": "/4.0/banking/payments/{payment_id}/cancel",
+  "tag": "Payments"
+ },
+ {
+  "id": "NewUpdatePayment",
+  "method": "PUT",
+  "path": "/4.0/banking/payments/{payment_id}",
+  "tag": "Payments"
+ },
+ {
+  "id": "Permissions",
+  "method": "GET",
+  "path": "/3.0/permissions",
+  "tag": "Permissions"
+ },
+ {
+  "id": "DeleteProject",
+  "method": "DELETE",
+  "path": "/2.0/pr_project/{project_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "DeleteMilestone",
+  "method": "DELETE",
+  "path": "/3.0/projects/{project_id}/milestones/{milestone_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "DeleteWorkPackage",
+  "method": "DELETE",
+  "path": "/3.0/projects/{project_id}/packages/{package_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2ListProjects",
+  "method": "GET",
+  "path": "/2.0/pr_project",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2ShowProject",
+  "method": "GET",
+  "path": "/2.0/pr_project/{project_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2ListProjectStatus",
+  "method": "GET",
+  "path": "/2.0/pr_project_state",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2ListProjectType",
+  "method": "GET",
+  "path": "/2.0/pr_project_type",
+  "tag": "Projects"
+ },
+ {
+  "id": "ListMilestones",
+  "method": "GET",
+  "path": "/3.0/projects/{project_id}/milestones",
+  "tag": "Projects"
+ },
+ {
+  "id": "ShowMilestone",
+  "method": "GET",
+  "path": "/3.0/projects/{project_id}/milestones/{milestone_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "ListWorkPackages",
+  "method": "GET",
+  "path": "/3.0/projects/{project_id}/packages",
+  "tag": "Projects"
+ },
+ {
+  "id": "ShowWorkPackage",
+  "method": "GET",
+  "path": "/3.0/projects/{project_id}/packages/{package_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "EditWorkPackage",
+  "method": "PATCH",
+  "path": "/3.0/projects/{project_id}/packages/{package_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2CreateProject",
+  "method": "POST",
+  "path": "/2.0/pr_project",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2SearchProjects",
+  "method": "POST",
+  "path": "/2.0/pr_project/search",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2EditProject",
+  "method": "POST",
+  "path": "/2.0/pr_project/{project_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2ArchiveProject",
+  "method": "POST",
+  "path": "/2.0/pr_project/{project_id}/archive",
+  "tag": "Projects"
+ },
+ {
+  "id": "v2UnarchiveProject",
+  "method": "POST",
+  "path": "/2.0/pr_project/{project_id}/reactivate",
+  "tag": "Projects"
+ },
+ {
+  "id": "CreateMilestone",
+  "method": "POST",
+  "path": "/3.0/projects/{project_id}/milestones",
+  "tag": "Projects"
+ },
+ {
+  "id": "EditMilestone",
+  "method": "POST",
+  "path": "/3.0/projects/{project_id}/milestones/{milestone_id}",
+  "tag": "Projects"
+ },
+ {
+  "id": "CreateWorkPackage",
+  "method": "POST",
+  "path": "/3.0/projects/{project_id}/packages",
+  "tag": "Projects"
+ },
+ {
+  "id": "v3PurchaseOrderDelete",
+  "method": "DELETE",
+  "path": "/3.0/purchase_orders/{purchase_order_id}",
+  "tag": "Purchase Orders"
+ },
+ {
+  "id": "v3PurchaseOrderList",
+  "method": "GET",
+  "path": "/3.0/purchase_orders",
+  "tag": "Purchase Orders"
+ },
+ {
+  "id": "v3PurchaseOrderShow",
+  "method": "GET",
+  "path": "/3.0/purchase_orders/{purchase_order_id}",
+  "tag": "Purchase Orders"
+ },
+ {
+  "id": "v3PurchaseOrderCreate",
+  "method": "POST",
+  "path": "/3.0/purchase_orders",
+  "tag": "Purchase Orders"
+ },
+ {
+  "id": "v3PurchaseOrderUpdate",
+  "method": "PUT",
+  "path": "/3.0/purchase_orders/{purchase_order_id}",
+  "tag": "Purchase Orders"
+ },
+ {
+  "id": "DeleteQuote",
+  "method": "DELETE",
+  "path": "/2.0/kb_offer/{quote_id}",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2ListQuotes",
+  "method": "GET",
+  "path": "/2.0/kb_offer",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2ShowQuote",
+  "method": "GET",
+  "path": "/2.0/kb_offer/{quote_id}",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2ShowQuotePDF",
+  "method": "GET",
+  "path": "/2.0/kb_offer/{quote_id}/pdf",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2CreateQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2SearchQuotes",
+  "method": "POST",
+  "path": "/2.0/kb_offer/search",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2EditQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2AcceptQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/accept",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2CopyQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/copy",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2CreateInvoiceFromQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/invoice",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2IssueQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/issue",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2RMarkAsSentQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/mark_as_sent",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2CreateOrderFromQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/order",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2ReissueQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/reissue",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2DeclineQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/reject",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2RevertIssueQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/revertIssue",
+  "tag": "Quotes"
+ },
+ {
+  "id": "v2SendQuote",
+  "method": "POST",
+  "path": "/2.0/kb_offer/{quote_id}/send",
+  "tag": "Quotes"
+ },
+ {
+  "id": "ListJournalEntries",
+  "method": "GET",
+  "path": "/3.0/accounting/journal",
+  "tag": "Reports"
+ },
+ {
+  "id": "v2DeleteSalutation",
+  "method": "DELETE",
+  "path": "/2.0/salutation/{salutation_id}",
+  "tag": "Salutations"
+ },
+ {
+  "id": "v2ListSalutations",
+  "method": "GET",
+  "path": "/2.0/salutation",
+  "tag": "Salutations"
+ },
+ {
+  "id": "v2ShowSalutation",
+  "method": "GET",
+  "path": "/2.0/salutation/{salutation_id}",
+  "tag": "Salutations"
+ },
+ {
+  "id": "v2CreateSalutation",
+  "method": "POST",
+  "path": "/2.0/salutation",
+  "tag": "Salutations"
+ },
+ {
+  "id": "v2SearchSalutations",
+  "method": "POST",
+  "path": "/2.0/salutation/search",
+  "tag": "Salutations"
+ },
+ {
+  "id": "v2EditSalutation",
+  "method": "POST",
+  "path": "/2.0/salutation/{salutation_id}",
+  "tag": "Salutations"
+ },
+ {
+  "id": "v2ListStockAreas",
+  "method": "GET",
+  "path": "/2.0/stock_place",
+  "tag": "Stock Areas"
+ },
+ {
+  "id": "v2SearchStockAreas",
+  "method": "POST",
+  "path": "/2.0/stock_place/search",
+  "tag": "Stock Areas"
+ },
+ {
+  "id": "v2ListStockLocations",
+  "method": "GET",
+  "path": "/2.0/stock",
+  "tag": "Stock locations"
+ },
+ {
+  "id": "v2SearchStockLocations",
+  "method": "POST",
+  "path": "/2.0/stock/search",
+  "tag": "Stock locations"
+ },
+ {
+  "id": "v2DeleteSubpositionPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subposition/{position_id}",
+  "tag": "Sub positions"
+ },
+ {
+  "id": "v2ListSubpositionPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subposition",
+  "tag": "Sub positions"
+ },
+ {
+  "id": "v2ShowSubpositionPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subposition/{position_id}",
+  "tag": "Sub positions"
+ },
+ {
+  "id": "v2CreateSubpositionPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subposition",
+  "tag": "Sub positions"
+ },
+ {
+  "id": "v2EditSubpositionPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subposition/{position_id}",
+  "tag": "Sub positions"
+ },
+ {
+  "id": "v2DeleteSubtotalPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subtotal/{position_id}",
+  "tag": "Subtotal positions"
+ },
+ {
+  "id": "v2ListSubtotalPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subtotal",
+  "tag": "Subtotal positions"
+ },
+ {
+  "id": "v2ShowSubtotalPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subtotal/{position_id}",
+  "tag": "Subtotal positions"
+ },
+ {
+  "id": "v2CreateSubtotalPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subtotal",
+  "tag": "Subtotal positions"
+ },
+ {
+  "id": "v2EditSubtotalPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_subtotal/{position_id}",
+  "tag": "Subtotal positions"
+ },
+ {
+  "id": "DeleteTask",
+  "method": "DELETE",
+  "path": "/2.0/task/{task_id}",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2ListTasks",
+  "method": "GET",
+  "path": "/2.0/task",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2ShowTask",
+  "method": "GET",
+  "path": "/2.0/task/{task_id}",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2ListTaskPriorities",
+  "method": "GET",
+  "path": "/2.0/todo_priority",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2ListTaskStatus",
+  "method": "GET",
+  "path": "/2.0/todo_status",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2CreateTask",
+  "method": "POST",
+  "path": "/2.0/task",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2SearchTasks",
+  "method": "POST",
+  "path": "/2.0/task/search",
+  "tag": "Tasks"
+ },
+ {
+  "id": "v2EditTask",
+  "method": "POST",
+  "path": "/2.0/task/{task_id}",
+  "tag": "Tasks"
+ },
+ {
+  "id": "DeleteTax",
+  "method": "DELETE",
+  "path": "/3.0/taxes/{tax_id}",
+  "tag": "Taxes"
+ },
+ {
+  "id": "ListTaxes",
+  "method": "GET",
+  "path": "/3.0/taxes",
+  "tag": "Taxes"
+ },
+ {
+  "id": "ShowTax",
+  "method": "GET",
+  "path": "/3.0/taxes/{tax_id}",
+  "tag": "Taxes"
+ },
+ {
+  "id": "v2DeleteTextPosition",
+  "method": "DELETE",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_text/{position_id}",
+  "tag": "Text positions"
+ },
+ {
+  "id": "v2ListTextPositions",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_text",
+  "tag": "Text positions"
+ },
+ {
+  "id": "v2ShowTextPosition",
+  "method": "GET",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_text/{position_id}",
+  "tag": "Text positions"
+ },
+ {
+  "id": "v2CreateTextPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_text",
+  "tag": "Text positions"
+ },
+ {
+  "id": "v2EditTextPosition",
+  "method": "POST",
+  "path": "/2.0/{kb_document_type}/{document_id}/kb_position_text/{position_id}",
+  "tag": "Text positions"
+ },
+ {
+  "id": "DeleteTimesheet",
+  "method": "DELETE",
+  "path": "/2.0/timesheet/{timesheet_id}",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2ListTimesheets",
+  "method": "GET",
+  "path": "/2.0/timesheet",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2ShowTimesheet",
+  "method": "GET",
+  "path": "/2.0/timesheet/{timesheet_id}",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2ListTimeSheetStatus",
+  "method": "GET",
+  "path": "/2.0/timesheet_status",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2CreateTimesheet",
+  "method": "POST",
+  "path": "/2.0/timesheet",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2SearchTimesheets",
+  "method": "POST",
+  "path": "/2.0/timesheet/search",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2EditTimesheet",
+  "method": "POST",
+  "path": "/2.0/timesheet/{timesheet_id}",
+  "tag": "Timesheets"
+ },
+ {
+  "id": "v2DeleteTitle",
+  "method": "DELETE",
+  "path": "/2.0/title/{title_id}",
+  "tag": "Titles"
+ },
+ {
+  "id": "v2ListTitles",
+  "method": "GET",
+  "path": "/2.0/title",
+  "tag": "Titles"
+ },
+ {
+  "id": "v2ShowTitle",
+  "method": "GET",
+  "path": "/2.0/title/{title_id}",
+  "tag": "Titles"
+ },
+ {
+  "id": "v2CreateTitle",
+  "method": "POST",
+  "path": "/2.0/title",
+  "tag": "Titles"
+ },
+ {
+  "id": "v2SearchTitles",
+  "method": "POST",
+  "path": "/2.0/title/search",
+  "tag": "Titles"
+ },
+ {
+  "id": "v2EditTitle",
+  "method": "POST",
+  "path": "/2.0/title/{title_id}",
+  "tag": "Titles"
+ },
+ {
+  "id": "v2DeleteUnit",
+  "method": "DELETE",
+  "path": "/2.0/unit/{unit_id}",
+  "tag": "Units"
+ },
+ {
+  "id": "v2ListUnits",
+  "method": "GET",
+  "path": "/2.0/unit",
+  "tag": "Units"
+ },
+ {
+  "id": "v2ShowUnit",
+  "method": "GET",
+  "path": "/2.0/unit/{unit_id}",
+  "tag": "Units"
+ },
+ {
+  "id": "v2CreateUnit",
+  "method": "POST",
+  "path": "/2.0/unit",
+  "tag": "Units"
+ },
+ {
+  "id": "v2SearchUnits",
+  "method": "POST",
+  "path": "/2.0/unit/search",
+  "tag": "Units"
+ },
+ {
+  "id": "v2EditUnit",
+  "method": "POST",
+  "path": "/2.0/unit/{unit_id}",
+  "tag": "Units"
+ },
+ {
+  "id": "v3DeleteFictionalUser",
+  "method": "DELETE",
+  "path": "/3.0/fictional_users/{fictional_user_id}",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3ListFictionalUsers",
+  "method": "GET",
+  "path": "/3.0/fictional_users",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3ShowFictionalUser",
+  "method": "GET",
+  "path": "/3.0/fictional_users/{fictional_user_id}",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3ListUsers",
+  "method": "GET",
+  "path": "/3.0/users",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3ShowMe",
+  "method": "GET",
+  "path": "/3.0/users/me",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3ShowUser",
+  "method": "GET",
+  "path": "/3.0/users/{user_id}",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3UpdateFictionalUser",
+  "method": "PATCH",
+  "path": "/3.0/fictional_users/{fictional_user_id}",
+  "tag": "User Management"
+ },
+ {
+  "id": "v3CreateFictionalUser",
+  "method": "POST",
+  "path": "/3.0/fictional_users",
+  "tag": "User Management"
+ },
+ {
+  "id": "ListVatPeriods",
+  "method": "GET",
+  "path": "/3.0/accounting/vat_periods",
+  "tag": "Vat Periods"
+ },
+ {
+  "id": "ShowVatPeriod",
+  "method": "GET",
+  "path": "/3.0/accounting/vat_periods/{vat_period_id}",
+  "tag": "Vat Periods"
+ }
+]
