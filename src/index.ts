@@ -25,6 +25,8 @@ export { documentResult } from './mcp/binary.js';
 export type { DocumentPayload } from './mcp/binary.js';
 export { parseCliConfig, CLI_USAGE } from './config.js';
 export type { BexioMcpConfig, CliCommand } from './config.js';
+export { startBexioHttpServer } from './mcp/http-server.js';
+export type { BexioHttpServerOptions, RunningHttpServer } from './mcp/http-server.js';
 export { FileTokenStore, defaultTokenStorePath } from './auth/token-store.js';
 export { runLoginFlow, DEFAULT_REDIRECT_URI } from './auth/login.js';
 export type { LoginFlowOptions } from './auth/login.js';

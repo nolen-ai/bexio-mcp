@@ -114,6 +114,43 @@ Highlights:
 - PDF and file downloads accept a `save_path` argument so large documents go to disk instead of the context window.
 - Legacy search endpoints take `search_criteria`: `[{ "field": "name_1", "value": "Muster", "criteria": "like" }]`, combined with AND.
 
+## Server-side & Docker
+
+`bexio-mcp serve-http` runs the server on the **streamable HTTP transport** — no GUI, configuration only, with automatic token refresh. Two auth modes, combinable:
+
+- **Multi-user (pass-through)**: don't configure any server credentials. Every client sends its own `Authorization: Bearer <bexio PAT or OAuth access token>` header; each MCP session acts as that user against bexio, and nothing is stored server-side. Sessions without a token are rejected with 401.
+- **Shared identity (single-tenant)**: configure `BEXIO_API_TOKEN` **or** the app credentials — then sessions without their own bearer use the server's identity. **This grants unauthenticated, full access to that bexio account to anyone who can reach the port.** On non-loopback binds (including Docker) it therefore stays off until you explicitly set `BEXIO_HTTP_SHARED_IDENTITY=true`; publish the port to loopback or a private network only (`-p 127.0.0.1:8722:8722`).
+
+Headless OAuth (no browser anywhere): obtain a refresh token once — either run `bexio-mcp login` on a workstation and copy `~/.bexio-mcp/tokens.json` into the container volume, or seed via `BEXIO_REFRESH_TOKEN`. The server refreshes it on first use and persists the rotated tokens to `BEXIO_TOKEN_STORE`; a stale seed left in the environment is ignored once the store holds fresher tokens.
+
+```bash
+docker build -t bexio-mcp .            # or: docker pull ghcr.io/mydata-ag/bexio-mcp:latest
+
+# Multi-user: clients authenticate themselves per request
+docker run -p 8722:8722 bexio-mcp
+
+# Single-tenant with app workflow + automatic refresh, tokens survive restarts.
+# Note the explicit shared-identity opt-in and the loopback-only publish.
+docker run -p 127.0.0.1:8722:8722 -v bexio-tokens:/data \
+  -e BEXIO_CLIENT_ID=… -e BEXIO_CLIENT_SECRET=… -e BEXIO_REFRESH_TOKEN=… \
+  -e BEXIO_HTTP_SHARED_IDENTITY=true \
+  bexio-mcp
+```
+
+Connect any MCP client to `http://host:8722/mcp` (e.g. Agno: `MCPTools(transport="streamable-http", url="http://host:8722/mcp")`, with the bearer header for multi-user mode). `GET /healthz` serves Docker health checks.
+
+Security notes: terminate TLS in a reverse proxy — bearer tokens must not cross networks in plain HTTP; the server binds `127.0.0.1` by default outside Docker; idle sessions are closed after 30 minutes and concurrent sessions are capped (503 past the limit); loopback binds validate the Host header against loopback values (DNS-rebinding protection) — behind a proxy, list your public hostname(s) in `BEXIO_HTTP_ALLOWED_HOSTS`; a bind-mounted `/data` must be writable by uid 1000 (prefer the named volume); env-passed secrets are visible via `docker inspect` — use your orchestrator's secret mechanism where available.
+
+| Environment variable          | CLI flag              | Description                                                    |
+|-------------------------------|-----------------------|----------------------------------------------------------------|
+| `BEXIO_HTTP_HOST`             | `--http-host`         | Bind address (default `127.0.0.1`; `0.0.0.0` in the image).    |
+| `BEXIO_HTTP_PORT`             | `--http-port`         | Port (default `8722`).                                         |
+| `BEXIO_HTTP_PATH`             | `--http-path`         | Endpoint path (default `/mcp`).                                |
+| `BEXIO_HTTP_SHARED_IDENTITY`  | `--shared-identity`   | Opt-in: anonymous sessions may use the server identity on non-loopback binds (**unauthenticated account access — see above**). |
+| `BEXIO_HTTP_MAX_SESSIONS`     | `--http-max-sessions` | Max concurrent MCP sessions (default 64).                      |
+| `BEXIO_HTTP_ALLOWED_HOSTS`    | `--http-allowed-hosts`| Accepted `Host` header values behind a reverse proxy.          |
+| `BEXIO_REFRESH_TOKEN`         | `--refresh-token`     | Headless bootstrap: seed the token store from a refresh token. |
+
 ## Using the client without MCP
 
 The typed client is dependency-free (uses global `fetch`) and importable on its own:
@@ -169,6 +206,18 @@ npm install
 npm run typecheck   # tsc --noEmit
 npm test            # vitest (includes the API coverage gate)
 npm run build       # tsup → dist/ (ESM + CJS + d.ts)
+```
+
+With [just](https://github.com/casey/just): `just check` runs the full gate, `just docker-build` builds the image.
+
+### Releasing
+
+Releases are tag-driven: pushing `vX.Y.Z` triggers the release workflow, which verifies the tag against `package.json`, runs the full gate, pushes the multi-arch Docker image to `ghcr.io/mydata-ag/bexio-mcp` (`latest`, `X.Y`, `X.Y.Z`), creates the GitHub release with generated notes, and publishes to npm when the `NPM_TOKEN` secret is configured.
+
+```bash
+just bump minor   # bump package.json + src/version.ts, commit "Release vX.Y.Z"
+git push          # let CI pass on main
+just tag          # tag vX.Y.Z (verifies clean tree, main, pushed, version sync) and push it
 ```
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the layering and module conventions. The API surface is pinned in `tests/fixtures/operations.json` (extracted from the official docs); `tests/coverage.test.ts` fails when bexio documents operations this package does not cover.

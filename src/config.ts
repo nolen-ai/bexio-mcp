@@ -20,9 +20,9 @@
 import { BexioConfigError } from './client/errors.js';
 import { TOOL_GROUPS, type ToolGroup } from './mcp/registry.js';
 
-export type CliCommand = 'serve' | 'login' | 'logout' | 'whoami';
+export type CliCommand = 'serve' | 'serve-http' | 'login' | 'logout' | 'whoami';
 
-const COMMANDS: readonly CliCommand[] = ['serve', 'login', 'logout', 'whoami'];
+const COMMANDS: readonly CliCommand[] = ['serve', 'serve-http', 'login', 'logout', 'whoami'];
 
 export interface BexioMcpConfig {
   token: string;
@@ -33,11 +33,25 @@ export interface BexioMcpConfig {
   redirectUri?: string;
   tokenStorePath?: string;
   noBrowser: boolean;
+  /** Headless bootstrap: refresh token used to seed the store (containers/CI). */
+  refreshToken?: string;
   baseUrl?: string;
   language?: string;
   groups?: ToolGroup[];
   readOnly: boolean;
   timeoutMs?: number;
+  /** serve-http: bind address (default 127.0.0.1; 0.0.0.0 in containers). */
+  httpHost?: string;
+  /** serve-http: TCP port (default 8722). */
+  httpPort?: number;
+  /** serve-http: endpoint path (default /mcp). */
+  httpPath?: string;
+  /** serve-http: allow the shared server identity on non-loopback binds. */
+  sharedIdentity: boolean;
+  /** serve-http: max concurrent sessions (default 64). */
+  httpMaxSessions?: number;
+  /** serve-http: accepted Host header values (DNS-rebinding protection behind proxies). */
+  httpAllowedHosts?: string[];
 }
 
 type ValueKey =
@@ -47,11 +61,17 @@ type ValueKey =
   | 'scopes'
   | 'redirectUri'
   | 'tokenStorePath'
+  | 'refreshToken'
   | 'baseUrl'
   | 'language'
   | 'groups'
-  | 'timeoutMs';
-type SwitchKey = 'readOnly' | 'noBrowser' | 'help' | 'version' | 'listTools';
+  | 'timeoutMs'
+  | 'httpHost'
+  | 'httpPort'
+  | 'httpPath'
+  | 'httpMaxSessions'
+  | 'httpAllowedHosts';
+type SwitchKey = 'readOnly' | 'noBrowser' | 'sharedIdentity' | 'help' | 'version' | 'listTools';
 
 const FLAG_TO_KEY: Record<string, ValueKey | SwitchKey> = {
   '--token': 'token',
@@ -60,12 +80,19 @@ const FLAG_TO_KEY: Record<string, ValueKey | SwitchKey> = {
   '--scopes': 'scopes',
   '--redirect-uri': 'redirectUri',
   '--token-store': 'tokenStorePath',
+  '--refresh-token': 'refreshToken',
   '--base-url': 'baseUrl',
   '--language': 'language',
   '--groups': 'groups',
   '--read-only': 'readOnly',
   '--no-browser': 'noBrowser',
   '--timeout-ms': 'timeoutMs',
+  '--http-host': 'httpHost',
+  '--http-port': 'httpPort',
+  '--http-path': 'httpPath',
+  '--http-max-sessions': 'httpMaxSessions',
+  '--http-allowed-hosts': 'httpAllowedHosts',
+  '--shared-identity': 'sharedIdentity',
   '--help': 'help',
   '-h': 'help',
   '--version': 'version',
@@ -73,7 +100,14 @@ const FLAG_TO_KEY: Record<string, ValueKey | SwitchKey> = {
   '--list-tools': 'listTools',
 };
 
-const SWITCH_KEYS: ReadonlySet<string> = new Set(['readOnly', 'noBrowser', 'help', 'version', 'listTools']);
+const SWITCH_KEYS: ReadonlySet<string> = new Set([
+  'readOnly',
+  'noBrowser',
+  'sharedIdentity',
+  'help',
+  'version',
+  'listTools',
+]);
 
 export interface ParsedCli {
   command?: CliCommand;
@@ -158,6 +192,23 @@ export function parseCliConfig(argv: readonly string[], env: NodeJS.ProcessEnv):
     if (timeoutMs !== undefined && (!Number.isFinite(timeoutMs) || timeoutMs <= 0)) {
       return { error: `Invalid timeout "${timeoutRaw}": expected a positive number of milliseconds.` };
     }
+    const httpPortRaw = values.httpPort ?? env.BEXIO_HTTP_PORT;
+    const httpPort = httpPortRaw !== undefined ? Number(httpPortRaw) : undefined;
+    if (httpPort !== undefined && (!Number.isInteger(httpPort) || httpPort < 0 || httpPort > 65535)) {
+      return { error: `Invalid HTTP port "${httpPortRaw}".` };
+    }
+    const httpMaxSessionsRaw = values.httpMaxSessions ?? env.BEXIO_HTTP_MAX_SESSIONS;
+    const httpMaxSessions = httpMaxSessionsRaw !== undefined ? Number(httpMaxSessionsRaw) : undefined;
+    if (httpMaxSessions !== undefined && (!Number.isInteger(httpMaxSessions) || httpMaxSessions < 1)) {
+      return { error: `Invalid HTTP session limit "${httpMaxSessionsRaw}".` };
+    }
+    let httpPath = values.httpPath ?? env.BEXIO_HTTP_PATH;
+    if (httpPath !== undefined) {
+      if (!httpPath.startsWith('/')) return { error: `Invalid HTTP path "${httpPath}": must start with "/".` };
+      if (httpPath.length > 1) httpPath = httpPath.replace(/\/+$/, '');
+      if (httpPath === '/healthz') return { error: '"/healthz" is reserved for health checks.' };
+    }
+    const httpAllowedHostsRaw = values.httpAllowedHosts ?? env.BEXIO_HTTP_ALLOWED_HOSTS;
     const config: BexioMcpConfig = {
       token: values.token ?? env.BEXIO_API_TOKEN ?? '',
       clientId: values.clientId ?? env.BEXIO_CLIENT_ID,
@@ -168,6 +219,21 @@ export function parseCliConfig(argv: readonly string[], env: NodeJS.ProcessEnv):
       noBrowser: switches.has('noBrowser')
         ? values.noBrowser === undefined || parseBool(values.noBrowser)
         : parseBool(env.BEXIO_NO_BROWSER),
+      refreshToken: values.refreshToken ?? env.BEXIO_REFRESH_TOKEN,
+      httpHost: values.httpHost ?? env.BEXIO_HTTP_HOST,
+      httpPort,
+      httpPath,
+      httpMaxSessions,
+      httpAllowedHosts:
+        httpAllowedHostsRaw !== undefined
+          ? httpAllowedHostsRaw
+              .split(',')
+              .map((h) => h.trim())
+              .filter((h) => h.length > 0)
+          : undefined,
+      sharedIdentity: switches.has('sharedIdentity')
+        ? values.sharedIdentity === undefined || parseBool(values.sharedIdentity)
+        : parseBool(env.BEXIO_HTTP_SHARED_IDENTITY),
       baseUrl: values.baseUrl ?? env.BEXIO_BASE_URL,
       language: values.language ?? env.BEXIO_LANGUAGE,
       groups: groupsRaw !== undefined ? parseGroups(groupsRaw) : undefined,
@@ -188,6 +254,7 @@ Usage: bexio-mcp [command] [options]
 
 Commands:
   serve                  Start the MCP server on stdio (default)
+  serve-http             Start the streamable HTTP MCP server (server-side/Docker)
   login                  Authorize via the bexio app OAuth flow (browser) and store tokens
   logout                 Revoke (best effort) and delete the stored OAuth tokens
   whoami                 Show the authenticated bexio user
@@ -206,6 +273,20 @@ Login options:
                          must be registered on the bexio app
   --token-store <path>   Token file location (default ~/.bexio-mcp/tokens.json)
   --no-browser           Print the authorization URL instead of opening a browser
+
+HTTP options (serve-http):
+  --http-host <host>     Bind address (default 127.0.0.1; 0.0.0.0 in containers)
+  --http-port <port>     Port (default 8722; env BEXIO_HTTP_PORT)
+  --http-path <path>     Endpoint path (default /mcp)
+  --shared-identity      Allow anonymous sessions to use the server identity on
+                         non-loopback binds (env BEXIO_HTTP_SHARED_IDENTITY).
+                         WARNING: grants unauthenticated access to the configured
+                         bexio account for anyone who can reach the port.
+  --http-max-sessions <n> Max concurrent MCP sessions (default 64)
+  --http-allowed-hosts <h1,h2> Accepted Host header values (DNS-rebinding
+                         protection; list your reverse-proxy hostname(s))
+  --refresh-token <rt>   Headless bootstrap: seed the token store from a refresh
+                         token (env BEXIO_REFRESH_TOKEN; prefer the env variable)
 
 Server options:
   --groups <a,b,…>       Tool groups to enable (default: all)

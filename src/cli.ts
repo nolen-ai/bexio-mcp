@@ -5,6 +5,7 @@
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { FileTokenStore, defaultTokenStorePath } from './auth/token-store.js';
 import { runLoginFlow, DEFAULT_REDIRECT_URI } from './auth/login.js';
+import { startBexioHttpServer } from './mcp/http-server.js';
 import { BexioClient } from './client/index.js';
 import type { TokenProvider } from './client/http.js';
 import { BASE_OIDC_SCOPES, BexioOAuth, OAuthTokenProvider } from './client/oauth.js';
@@ -19,15 +20,22 @@ const out = (message: string): void => void process.stdout.write(`${message}\n`)
 
 /**
  * Picks the token source for API-calling commands:
- * a static token (BEXIO_API_TOKEN) wins; otherwise stored OAuth tokens
- * with automatic refresh via the app's client credentials.
+ * a static token (BEXIO_API_TOKEN) wins; otherwise stored OAuth tokens with
+ * automatic refresh via the app's client credentials. A configured
+ * BEXIO_REFRESH_TOKEN seeds the flow headlessly (containers/CI): the provider
+ * refreshes it on first use and persists the rotated tokens — if the store
+ * already holds fresher tokens from a previous run, those win automatically.
  */
 function resolveTokenSource(config: BexioMcpConfig): TokenProvider | undefined {
   if (config.token) return config.token;
   if (config.clientId && config.clientSecret) {
     const oauth = new BexioOAuth({ clientId: config.clientId, clientSecret: config.clientSecret });
     const store = new FileTokenStore(config.tokenStorePath ?? defaultTokenStorePath(), config.clientId);
-    const provider = new OAuthTokenProvider(oauth, store);
+    const seed =
+      config.refreshToken !== undefined
+        ? { accessToken: '', refreshToken: config.refreshToken, expiresAt: 0 }
+        : undefined;
+    const provider = new OAuthTokenProvider(oauth, store, seed);
     return provider.accessTokenProvider();
   }
   return undefined;
@@ -130,9 +138,37 @@ async function commandServe(config: BexioMcpConfig, listTools: boolean): Promise
   });
 }
 
+async function commandServeHttp(config: BexioMcpConfig): Promise<void> {
+  const serverIdentity = resolveTokenSource(config);
+  const running = await startBexioHttpServer({
+    host: config.httpHost,
+    port: config.httpPort,
+    path: config.httpPath,
+    serverIdentity,
+    allowSharedIdentityOnNetwork: config.sharedIdentity,
+    maxSessions: config.httpMaxSessions,
+    allowedHosts: config.httpAllowedHosts,
+    groups: config.groups,
+    readOnly: config.readOnly,
+    clientOptions: {
+      baseUrl: config.baseUrl,
+      language: config.language,
+      timeoutMs: config.timeoutMs,
+    },
+  });
+  const shutdown = (): void => {
+    err('bexio-mcp: shutting down…');
+    void running.close().finally(() => process.exit(0));
+  };
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+  // Windows never delivers SIGTERM; Ctrl+Break maps to SIGBREAK there.
+  process.on('SIGBREAK', shutdown);
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
-  for (const secretFlag of ['--token', '--client-secret']) {
+  for (const secretFlag of ['--token', '--client-secret', '--refresh-token']) {
     if (argv.some((a) => a === secretFlag || a.startsWith(`${secretFlag}=`))) {
       err(
         `Warning: passing secrets via ${secretFlag} exposes them in the process list; ` +
@@ -163,6 +199,8 @@ async function main(): Promise<void> {
       return commandLogout(config);
     case 'whoami':
       return commandWhoami(config);
+    case 'serve-http':
+      return commandServeHttp(config);
     case 'serve':
     default:
       return commandServe(config, parsed.listTools === true);

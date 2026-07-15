@@ -19,6 +19,8 @@ src/
 │   ├── registry.ts          Tool definition model + registration (filtering, errors, truncation)
 │   ├── binary.ts            documentResult() for PDF/file returning tools
 │   ├── scopes.ts            Tool group -> API scope map (drives default login scopes)
+│   ├── http-server.ts       Streamable HTTP transport: multi-user bearer pass-through
+│   │                        per session + optional shared server identity (Docker)
 │   ├── tools/               One module per API domain mirroring client/resources/
 │   └── index.ts             createBexioMcpServer()
 ├── config.ts                Env/CLI configuration
