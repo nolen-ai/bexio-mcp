@@ -19,20 +19,18 @@ Windsurf reads MCP servers from `~/.codeium/windsurf/mcp_config.json`. Add bexio
       "command": "npx",
       "args": ["-y", "github:mydata-ag/bexio-mcp"],
       "env": {
-        "BEXIO_API_TOKEN": "<your-personal-access-token>"
+        "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
     }
   }
 }
 ```
 
-Once the package is published to the npm registry, `"args": ["-y", "bexio-mcp"]` will work too.
-
 You can also edit this file from the UI: open the **MCPs** icon in the Cascade panel, then choose to manage/add a custom server, which opens `mcp_config.json`. After saving, refresh the MCP server list in Windsurf.
 
 Tip: Windsurf supports `${env:VAR_NAME}` interpolation in `mcp_config.json`, so you can write `"BEXIO_API_TOKEN": "${env:BEXIO_API_TOKEN}"` instead of pasting the token into the file.
 
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -50,7 +48,7 @@ Then point Windsurf at it with the `serverUrl` form, passing the token as a head
     "bexio": {
       "serverUrl": "http://127.0.0.1:8722/mcp",
       "headers": {
-        "Authorization": "Bearer <your-personal-access-token>"
+        "Authorization": "Bearer YOUR_BEXIO_TOKEN"
       }
     }
   }
@@ -60,7 +58,7 @@ Then point Windsurf at it with the `serverUrl` form, passing the token as a head
 Alternatively, configure a single shared identity on the server and drop the `headers` block from the config:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

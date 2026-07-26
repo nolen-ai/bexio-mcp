@@ -8,16 +8,29 @@ Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server cover
 - A bexio Personal Access Token from <https://developer.bexio.com/pat> (full account access, expires after 6 months)
 - Claude Code installed (`npm install -g @anthropic-ai/claude-code`) and signed in
 
-## Setup (stdio, recommended)
+## Quick setup (recommended)
 
-Add bexio-mcp for yourself in the current project:
+Replace `YOUR_BEXIO_TOKEN` with your PAT and run:
 
 ```bash
-claude mcp add --env BEXIO_API_TOKEN=your-token --transport stdio bexio \
-  -- npx -y github:mydata-ag/bexio-mcp
+claude mcp add --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
 ```
 
-The `--` separates Claude Code's own flags from the server command. Once the package is published on npm, `npx -y bexio-mcp` will work as well; the GitHub form above works today.
+Check it immediately:
+
+```bash
+claude mcp list
+```
+
+You should see `bexio … ✔ Connected`. The first connection downloads and
+builds the server and can take a few seconds. Start Claude Code and ask:
+
+> List my 10 most recent open invoices in bexio.
+
+The `--` separates Claude Code's options from the server command. The default
+scope is local to the current project; add `--scope user` before `bexio` to make
+the server available in every project.
 
 ### Project scope via `.mcp.json`
 
@@ -39,7 +52,7 @@ To share the config with your team, commit a `.mcp.json` file at the project roo
 
 Each teammate sets `BEXIO_API_TOKEN` in their shell; Claude Code expands `${VAR}` (and `${VAR:-default}`) when loading `.mcp.json`.
 
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -53,20 +66,44 @@ Point Claude Code at it:
 
 ```bash
 claude mcp add --transport http bexio http://127.0.0.1:8722/mcp \
-  --header "Authorization: Bearer your-bexio-token"
+  --header "Authorization: Bearer YOUR_BEXIO_TOKEN"
 ```
 
 Alternatively, configure a single shared identity on the server and omit the `--header` flag:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 \
+  -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  -e BEXIO_HTTP_SHARED_IDENTITY=true \
+  ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.
 
-Health check: `GET http://127.0.0.1:8722/healthz`.
+Health check: `GET http://127.0.0.1:8722/healthz`. Verify the connection with
+`claude mcp list`, or `/mcp` inside a session.
 
-Verify either setup with `claude mcp list`, or `/mcp` inside a session.
+## Troubleshooting `Failed to reconnect … -32000`
+
+Claude Code uses `-32000` for several MCP subprocess failures. If the server was
+added with `npx -y bexio-mcp`, npm currently returns `E404` because the package
+is not published on the npm registry yet. Replace that entry with the working
+GitHub package specifier:
+
+```bash
+claude mcp remove bexio
+claude mcp add --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+```
+
+Then run `claude mcp list` again. If it still fails, run the tool-list command
+directly to expose installation, build, or configuration errors (a successful
+run prints 35 tools):
+
+```bash
+BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  npx -y github:mydata-ag/bexio-mcp --list-tools
+```
 
 ## Try it
 

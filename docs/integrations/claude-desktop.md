@@ -15,7 +15,7 @@ Claude Desktop spawns local MCP servers from `claude_desktop_config.json`. Open 
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-Add bexio-mcp under `mcpServers` (the package is not on npm yet, so install straight from GitHub):
+Add bexio-mcp under `mcpServers`:
 
 ```json
 {
@@ -24,14 +24,12 @@ Add bexio-mcp under `mcpServers` (the package is not on npm yet, so install stra
       "command": "npx",
       "args": ["-y", "github:mydata-ag/bexio-mcp"],
       "env": {
-        "BEXIO_API_TOKEN": "your-personal-access-token"
+        "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
     }
   }
 }
 ```
-
-Once the package is published to npm, `"args": ["-y", "bexio-mcp"]` will work too.
 
 Save the file, then fully quit and restart Claude Desktop. Click the "Add files, connectors, and more" button in the input box → **Connectors** to confirm the bexio tools are listed.
 
@@ -46,7 +44,7 @@ Claude Desktop launches servers with a minimal environment, so a bare `"command"
       "command": "cmd",
       "args": ["/c", "npx", "-y", "github:mydata-ag/bexio-mcp"],
       "env": {
-        "BEXIO_API_TOKEN": "your-personal-access-token"
+        "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
     }
   }
@@ -55,14 +53,14 @@ Claude Desktop launches servers with a minimal environment, so a bare `"command"
 
 Alternatively, use the full path to `npx.cmd` (find it with `where npx`), e.g. `"command": "C:\\Program Files\\nodejs\\npx.cmd"`. If startup still fails, check the logs in `%APPDATA%\Claude\logs` (macOS: `~/Library/Logs/Claude`).
 
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
 Claude Desktop can also reach a bexio-mcp instance running as a remote MCP server via **Settings → Connectors → Add → Add custom connector**. The custom-connector UI cannot send per-user `Authorization` headers, so the server needs a shared identity:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

@@ -39,9 +39,7 @@ async def main():
 asyncio.run(main())
 ```
 
-Once the package is published on npm you can shorten the args to `["-y", "bexio-mcp"]`; today, install from GitHub as shown (or `npm install -g github:mydata-ag/bexio-mcp` and use `command="bexio-mcp"`).
-
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -69,7 +67,7 @@ agent = Agent("anthropic:claude-sonnet-4-5", toolsets=[bexio])
 Alternatively, configure a single shared identity on the server and connect without headers (`MCPToolset("http://127.0.0.1:8722/mcp")`):
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

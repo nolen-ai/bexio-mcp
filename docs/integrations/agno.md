@@ -10,7 +10,7 @@ Use [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering 
 
 ## Setup (stdio, recommended)
 
-Agno spawns the server directly. `npx -y github:mydata-ag/bexio-mcp` works today; once the package is on npm you can use `npx -y bexio-mcp` instead.
+Agno spawns the server directly:
 
 ```python
 import asyncio
@@ -46,7 +46,7 @@ async def main():
 asyncio.run(main())
 ```
 
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -72,7 +72,7 @@ await mcp_tools.connect()
 Alternatively, configure a single shared identity on the server and connect without headers (`MCPTools(transport="streamable-http", url="http://127.0.0.1:8722/mcp")`):
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

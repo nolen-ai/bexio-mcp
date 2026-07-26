@@ -1,11 +1,17 @@
-# Integration quick-starts
+# Choose your MCP client
 
-Copy-paste guides for connecting `bexio-mcp` to coding agents, desktop apps and agent frameworks.
+Each guide below starts with a working, copy-paste setup for `bexio-mcp`.
 
-Two ways to run the server, supported by every integration below in at least one form:
+For the recommended local setup you need [Node.js 18+](https://nodejs.org/)
+and a [bexio Personal Access Token](https://developer.bexio.com/pat). Your MCP
+client starts the server with:
 
-- **stdio (local)** — the integration spawns the server per session: `npx -y github:mydata-ag/bexio-mcp` with `BEXIO_API_TOKEN` in the environment.
-- **HTTP (shared/Docker)** — one `serve-http` deployment (e.g. `docker run -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest`) serving many clients at `http://host:8722/mcp`; in multi-user mode each client sends its own `Authorization: Bearer <token>` header.
+```text
+npx -y github:mydata-ag/bexio-mcp
+```
+
+There is nothing to clone or install globally. The first start downloads and
+builds the package and can take a few seconds.
 
 | Integration | Guide | stdio | HTTP |
 |-------------|-------|:-----:|:----:|
@@ -24,10 +30,17 @@ Two ways to run the server, supported by every integration below in at least one
 | LangChain / LangGraph | [langchain.md](langchain.md) | ✅ | ✅ |
 | n8n | [n8n.md](n8n.md) | — | ✅ |
 
-Common to all setups:
+Use **stdio** unless you specifically need a shared or remote deployment. For
+remote clients, every guide also includes a Docker setup using the published
+image and streamable HTTP endpoint at `http://host:8722/mcp`.
 
-- **Token**: create a Personal Access Token at [developer.bexio.com/pat](https://developer.bexio.com/pat), or use the [OAuth app workflow](../../README.md#quick-start) (`bexio-mcp login`).
-- **Safety**: `BEXIO_READ_ONLY=true` disables all write actions; `BEXIO_TOOL_GROUPS=contacts,sales,…` trims the 35 tools to what you need.
+Useful options in every setup:
+
+- **Safety**: `BEXIO_READ_ONLY=true` disables all write actions.
+- **Smaller toolset**: `BEXIO_TOOL_GROUPS=contacts,sales` loads only the groups you need.
 - **Language**: `BEXIO_LANGUAGE=de|fr|it|en` for translated fields (tax codes etc.).
+- **Scoped authentication**: use the [OAuth app workflow](../../README.md#oauth-app-workflow) instead of a PAT.
 
+Having trouble connecting? Follow the
+[two-command startup and authentication check](../../README.md#troubleshooting).
 Full configuration reference: [main README](../../README.md).

@@ -19,7 +19,7 @@ Cursor reads MCP servers from `~/.cursor/mcp.json` (global, all projects) or `.c
       "command": "npx",
       "args": ["-y", "github:mydata-ag/bexio-mcp"],
       "env": {
-        "BEXIO_API_TOKEN": "your-bexio-token"
+        "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
     }
   }
@@ -28,9 +28,10 @@ Cursor reads MCP servers from `~/.cursor/mcp.json` (global, all projects) or `.c
 
 Reload Cursor (or toggle the server in **Settings → MCP**) and the bexio tools appear.
 
-Once the package is published on npm you will be able to use `"args": ["-y", "bexio-mcp"]` instead; the GitHub form above works today. To avoid committing your token to a project config, use Cursor's interpolation: `"BEXIO_API_TOKEN": "${env:BEXIO_API_TOKEN}"`.
+To avoid committing your token to a project config, use Cursor's interpolation:
+`"BEXIO_API_TOKEN": "${env:BEXIO_API_TOKEN}"`.
 
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -48,7 +49,7 @@ Point Cursor at it in `~/.cursor/mcp.json`:
     "bexio": {
       "url": "http://127.0.0.1:8722/mcp",
       "headers": {
-        "Authorization": "Bearer your-bexio-token"
+        "Authorization": "Bearer YOUR_BEXIO_TOKEN"
       }
     }
   }
@@ -60,7 +61,7 @@ Health check: `curl http://127.0.0.1:8722/healthz`.
 Alternatively, configure a single shared identity on the server and drop the `headers` block from the client config:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

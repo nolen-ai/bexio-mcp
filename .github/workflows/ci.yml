@@ -19,12 +19,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run check:docs
       - run: npm test
       - run: npm run build
       - name: Smoke test CLI
         run: |
           node dist/cli.js --version
           node dist/cli.js --list-tools | wc -l
+          npm run smoke:stdio
 
   docker:
     runs-on: ubuntu-latest

@@ -13,7 +13,7 @@ Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server cover
 Add the server with one command:
 
 ```bash
-codex mcp add bexio --env BEXIO_API_TOKEN=your-bexio-token -- npx -y github:mydata-ag/bexio-mcp
+codex mcp add bexio --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -- npx -y github:mydata-ag/bexio-mcp
 ```
 
 Or edit `~/.codex/config.toml` directly:
@@ -24,12 +24,10 @@ command = "npx"
 args = ["-y", "github:mydata-ag/bexio-mcp"]
 
 [mcp_servers.bexio.env]
-BEXIO_API_TOKEN = "your-bexio-token"
+BEXIO_API_TOKEN = "YOUR_BEXIO_TOKEN"
 ```
 
-Once the package is published on the npm registry, `args = ["-y", "bexio-mcp"]` will work too; today, install from GitHub as shown above (or run `npm install -g github:mydata-ag/bexio-mcp` and set `command = "bexio-mcp"` with no args).
-
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -50,7 +48,7 @@ bearer_token_env_var = "BEXIO_API_TOKEN"
 Alternatively, configure a single shared identity on the server; Codex then needs only `url = "http://127.0.0.1:8722/mcp"` with no `bearer_token_env_var`:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

@@ -7,55 +7,136 @@
 - **Safe**: opt-in read-only mode, destructive-action annotations, tool-group filtering, and API errors mapped to actionable messages (expired token, missing scope, rate limit) instead of crashes.
 - **Robust**: automatic retry on rate limits (honouring `RateLimit-Reset`), retries for transient GET failures, request timeouts, typed error hierarchy.
 
-## Quick start
+## Get started in two minutes
 
-### 1. Choose an authentication method
+You need:
 
-**Option A — Personal Access Token** (simplest, personal use): create a PAT at [developer.bexio.com/pat](https://developer.bexio.com/pat). PATs have full access to your company data and expire after six months. Set it as `BEXIO_API_TOKEN`.
+- [Node.js 18 or newer](https://nodejs.org/) — check with `node --version`
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — or choose [another MCP client](docs/integrations/README.md)
+- A bexio Personal Access Token (PAT) from [developer.bexio.com/pat](https://developer.bexio.com/pat)
 
-**Option B — App workflow** (OAuth 2.0 Authorization Code Flow, for apps and scoped access):
+Add the server to Claude Code, replacing `YOUR_BEXIO_TOKEN` with your PAT:
+
+```bash
+claude mcp add --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+```
+
+Verify the connection:
+
+```bash
+claude mcp list
+```
+
+The result should include:
+
+```text
+bexio: npx -y github:mydata-ag/bexio-mcp - ✔ Connected
+```
+
+The first start downloads and builds the server and can take a few seconds.
+After that, open Claude Code and try:
+
+> List my 10 most recent open invoices in bexio.
+
+No clone or global install is required. Claude Code stores the token in its
+local MCP configuration and passes it only to the local server process. Do not
+commit the token to a repository or paste it into prompts.
+
+### Start in read-only mode
+
+For a safer first look, use this command instead of the one above. It disables
+all create, update, send, and delete actions:
+
+```bash
+claude mcp add \
+  --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_READ_ONLY=true \
+  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+```
+
+### Claude Desktop and other clients
+
+For Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI, Codex CLI, Pi, n8n,
+and agent SDKs, use the matching [copy-paste integration guide](docs/integrations/README.md).
+Every guide uses an installation method that works today.
+
+## Authentication
+
+### Personal Access Token
+
+A [Personal Access Token](https://developer.bexio.com/pat) is the fastest option
+for personal use. It has the same access as your bexio user and expires after
+six months. Configure it as `BEXIO_API_TOKEN`.
+
+### OAuth app workflow
+
+Use OAuth when you need scoped permissions, automatic token refresh, or a
+long-running deployment:
 
 1. Create an app at [developer.bexio.com](https://developer.bexio.com) and add
    `http://127.0.0.1:33771/callback` to its **Allowed redirect URLs**.
-2. Reveal the **Client ID** and **Client Secret** under "App Details".
-3. Authorize once — a browser opens for the bexio consent screen:
+2. Reveal the **Client ID** and **Client Secret** under **App Details**.
+3. Authorize once:
 
    ```bash
-   BEXIO_CLIENT_ID=… BEXIO_CLIENT_SECRET=… npx bexio-mcp login
+   BEXIO_CLIENT_ID=YOUR_CLIENT_ID \
+   BEXIO_CLIENT_SECRET=YOUR_CLIENT_SECRET \
+   npx -y github:mydata-ag/bexio-mcp login
    ```
 
-   Requested scopes are derived from the enabled tool groups (write scopes are dropped in `--read-only` mode); override with `--scopes`. Tokens land in `~/.bexio-mcp/tokens.json` — treat that file like a password.
-4. Start the server with the same `BEXIO_CLIENT_ID`/`BEXIO_CLIENT_SECRET` env (no `BEXIO_API_TOKEN`): it uses the stored tokens and **auto-refreshes** them, persisting the rotated refresh token on every refresh. With `offline_access` the session stays valid as long as it refreshes at least once a year.
+   A browser opens for consent. Tokens are stored in
+   `~/.bexio-mcp/tokens.json`; treat this file like a password.
+4. Add the server to your MCP client with `BEXIO_CLIENT_ID` and
+   `BEXIO_CLIENT_SECRET` instead of `BEXIO_API_TOKEN`. The server loads the
+   stored token and refreshes it automatically.
 
-`bexio-mcp whoami` prints the authenticated user; `bexio-mcp logout` deletes the stored tokens (and also revokes them at the identity provider when the app credentials are set).
+Requested scopes are derived from the enabled tool groups; write scopes are
+omitted in read-only mode. Override them with `BEXIO_SCOPES` or `--scopes`.
 
-### 2. Add the server to your MCP host
-
-**Claude Code**
+Use the full GitHub command with `whoami` to verify the authenticated bexio
+user, or `logout` to revoke and remove the stored tokens:
 
 ```bash
-claude mcp add bexio --env BEXIO_API_TOKEN=<your-token> -- npx -y bexio-mcp
+BEXIO_CLIENT_ID=YOUR_CLIENT_ID BEXIO_CLIENT_SECRET=YOUR_CLIENT_SECRET \
+  npx -y github:mydata-ag/bexio-mcp whoami
 ```
 
-**Claude Desktop / any MCP host** (`claude_desktop_config.json` or equivalent):
+## Troubleshooting
 
-```json
-{
-  "mcpServers": {
-    "bexio": {
-      "command": "npx",
-      "args": ["-y", "bexio-mcp"],
-      "env": {
-        "BEXIO_API_TOKEN": "<your-token>"
-      }
-    }
-  }
-}
+### Claude reports `Failed to reconnect … -32000`
+
+Make sure the configured command includes the GitHub package specifier. The
+short form `npx -y bexio-mcp` does not work until this project is published on
+the npm registry.
+
+Reset an incorrect Claude Code entry with:
+
+```bash
+claude mcp remove bexio
+claude mcp add --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+claude mcp list
 ```
 
-That's it — ask your model to "list open bexio invoices", "create a quote for Muster AG", or "how many hours were tracked on project X this month?".
+### Check the server outside your MCP client
 
-Using something else? There are copy-paste quick-starts for **Cursor, VS Code, Windsurf, Gemini CLI, Codex CLI, Pi, Agno, OpenAI Agents SDK, Pydantic AI, LangChain/LangGraph, n8n, the Claude Agent SDK** and more in [docs/integrations](docs/integrations/README.md).
+This command should print 35 tools and exit:
+
+```bash
+BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  npx -y github:mydata-ag/bexio-mcp --list-tools
+```
+
+Then verify that bexio accepts the token:
+
+```bash
+BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
+  npx -y github:mydata-ag/bexio-mcp whoami
+```
+
+If tool listing fails, check `node --version` is 18 or newer and read the error
+printed by `npx`. If `whoami` returns 401, create a new PAT and update the token
+in your MCP client.
 
 ## Configuration
 
@@ -74,12 +155,14 @@ Using something else? There are copy-paste quick-starts for **Cursor, VS Code, W
 | `BEXIO_BASE_URL`     | `--base-url`    | API host override (default `https://api.bexio.com`).                        |
 | `BEXIO_TIMEOUT_MS`   | `--timeout-ms`  | Per-request timeout in milliseconds (default 30000).                        |
 
-`bexio-mcp --list-tools` prints the tools that would be registered; `--help` shows usage.
+Add these variables to your MCP client's `env` block or `--env` options. Run
+`npx -y github:mydata-ag/bexio-mcp --help` for every CLI option.
 
 ### Read-only mode
 
 ```bash
-BEXIO_API_TOKEN=… BEXIO_READ_ONLY=true npx bexio-mcp
+BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_READ_ONLY=true \
+  npx -y github:mydata-ag/bexio-mcp --list-tools
 ```
 
 Write actions return an explanatory error without touching the API; tools that only write are hidden entirely. Recommended when you want analysis/reporting but no mutations.
@@ -89,7 +172,8 @@ Write actions return an explanatory error without touching the API; tools that o
 `contacts`, `sales`, `purchase`, `accounting`, `banking`, `items`, `projects`, `files`, `payroll`, `misc`
 
 ```bash
-BEXIO_TOOL_GROUPS=contacts,sales,items npx bexio-mcp
+BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_TOOL_GROUPS=contacts,sales,items \
+  npx -y github:mydata-ag/bexio-mcp --list-tools
 ```
 
 ## Tools
@@ -118,30 +202,66 @@ Highlights:
 
 ## Server-side & Docker
 
-`bexio-mcp serve-http` runs the server on the **streamable HTTP transport** — no GUI, configuration only, with automatic token refresh. Two auth modes, combinable:
+Use the published Docker image when your MCP client cannot start a local stdio
+server, or when several clients need the same deployment.
+
+Start the server:
+
+```bash
+docker run -d --name bexio-mcp -p 8722:8722 \
+  ghcr.io/mydata-ag/bexio-mcp:latest
+```
+
+Check it:
+
+```bash
+curl http://127.0.0.1:8722/healthz
+```
+
+The MCP endpoint is `http://127.0.0.1:8722/mcp`. In this default multi-user
+mode, each client sends its own bexio token as
+`Authorization: Bearer YOUR_BEXIO_TOKEN`. Follow the relevant
+[integration guide](docs/integrations/README.md) for the exact client config.
+
+### HTTP authentication modes
 
 - **Multi-user (pass-through)**: don't configure any server credentials. Every client sends its own `Authorization: Bearer <bexio PAT or OAuth access token>` header; each MCP session acts as that user against bexio, and nothing is stored server-side. Sessions without a token are rejected with 401.
 - **Shared identity (single-tenant)**: configure `BEXIO_API_TOKEN` **or** the app credentials — then sessions without their own bearer use the server's identity. **This grants unauthenticated, full access to that bexio account to anyone who can reach the port.** On non-loopback binds (including Docker) it therefore stays off until you explicitly set `BEXIO_HTTP_SHARED_IDENTITY=true`; publish the port to loopback or a private network only (`-p 127.0.0.1:8722:8722`).
 
-Headless OAuth (no browser anywhere): obtain a refresh token once — either run `bexio-mcp login` on a workstation and copy `~/.bexio-mcp/tokens.json` into the container volume, or seed via `BEXIO_REFRESH_TOKEN`. The server refreshes it on first use and persists the rotated tokens to `BEXIO_TOKEN_STORE`; a stale seed left in the environment is ignored once the store holds fresher tokens.
+For a local, single-account deployment with a PAT:
 
 ```bash
-docker build -t bexio-mcp .            # or: docker pull ghcr.io/mydata-ag/bexio-mcp:latest
-
-# Multi-user: clients authenticate themselves per request
-docker run -p 8722:8722 bexio-mcp
-
-# Single-tenant with app workflow + automatic refresh, tokens survive restarts.
-# Note the explicit shared-identity opt-in and the loopback-only publish.
-docker run -p 127.0.0.1:8722:8722 -v bexio-tokens:/data \
-  -e BEXIO_CLIENT_ID=… -e BEXIO_CLIENT_SECRET=… -e BEXIO_REFRESH_TOKEN=… \
+docker run -d --name bexio-mcp \
+  -p 127.0.0.1:8722:8722 \
+  -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
   -e BEXIO_HTTP_SHARED_IDENTITY=true \
-  bexio-mcp
+  ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
-Connect any MCP client to `http://host:8722/mcp` (e.g. Agno: `MCPTools(transport="streamable-http", url="http://host:8722/mcp")`, with the bearer header for multi-user mode). `GET /healthz` serves Docker health checks.
+Do not expose shared-identity mode to an untrusted network: anyone who can
+reach it can use the configured bexio account.
 
-Security notes: terminate TLS in a reverse proxy — bearer tokens must not cross networks in plain HTTP; the server binds `127.0.0.1` by default outside Docker; idle sessions are closed after 30 minutes and concurrent sessions are capped (503 past the limit); loopback binds validate the Host header against loopback values (DNS-rebinding protection) — behind a proxy, list your public hostname(s) in `BEXIO_HTTP_ALLOWED_HOSTS`; a bind-mounted `/data` must be writable by uid 1000 (prefer the named volume); env-passed secrets are visible via `docker inspect` — use your orchestrator's secret mechanism where available.
+### Long-running OAuth deployment
+
+Obtain a refresh token once with the [OAuth app workflow](#oauth-app-workflow),
+then seed the container. The server refreshes and persists rotated tokens in
+the named volume:
+
+```bash
+docker run -d --name bexio-mcp \
+  -p 127.0.0.1:8722:8722 \
+  -v bexio-tokens:/data \
+  -e BEXIO_CLIENT_ID=YOUR_CLIENT_ID \
+  -e BEXIO_CLIENT_SECRET=YOUR_CLIENT_SECRET \
+  -e BEXIO_REFRESH_TOKEN=YOUR_REFRESH_TOKEN \
+  -e BEXIO_HTTP_SHARED_IDENTITY=true \
+  ghcr.io/mydata-ag/bexio-mcp:latest
+```
+
+For remote deployments, terminate TLS in a reverse proxy: bearer tokens must
+not cross networks over plain HTTP. Behind a proxy, list its public hostname in
+`BEXIO_HTTP_ALLOWED_HOSTS`. Environment variables are visible through
+`docker inspect`; use your platform's secret mechanism in production.
 
 | Environment variable          | CLI flag              | Description                                                    |
 |-------------------------------|-----------------------|----------------------------------------------------------------|
@@ -155,7 +275,14 @@ Security notes: terminate TLS in a reverse proxy — bearer tokens must not cros
 
 ## Using the client without MCP
 
-The typed client is dependency-free (uses global `fetch`) and importable on its own:
+Install directly from GitHub:
+
+```bash
+npm install github:mydata-ag/bexio-mcp
+```
+
+The typed client is dependency-free (uses global `fetch`) and importable on its
+own:
 
 ```ts
 import { BexioClient } from 'bexio-mcp/client';

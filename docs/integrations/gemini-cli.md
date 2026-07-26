@@ -26,7 +26,9 @@ Gemini CLI reads MCP servers from the `mcpServers` object in `.gemini/settings.j
 }
 ```
 
-Set the token in your shell environment (`export BEXIO_API_TOKEN=...`) so it stays out of the config file. Once the package is published on npm, `"args": ["-y", "bexio-mcp"]` will work too.
+Set the token in your shell environment
+(`export BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN`) so it
+stays out of the config file.
 
 Or add it in one command instead of editing JSON:
 
@@ -34,7 +36,7 @@ Or add it in one command instead of editing JSON:
 gemini mcp add -e BEXIO_API_TOKEN=$BEXIO_API_TOKEN bexio npx -y github:mydata-ag/bexio-mcp
 ```
 
-Prefer scoped OAuth over a PAT? Use the [app workflow](../../README.md#quick-start) (`bexio-mcp login`).
+Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oauth-app-workflow).
 
 ## Setup (HTTP via Docker)
 
@@ -62,7 +64,7 @@ Then point Gemini CLI at it with `httpUrl`, passing the token per client:
 Alternatively, configure a single shared identity on the server and drop the `headers` block from the config:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=<your-pat> -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

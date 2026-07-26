@@ -63,9 +63,11 @@
     "prepare": "tsup",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "check:docs": "node scripts/check-docs.mjs",
+    "smoke:stdio": "node scripts/smoke-stdio.mjs",
     "test:watch": "vitest",
     "lint": "tsc --noEmit",
-    "prepublishOnly": "npm run typecheck && npm run test && npm run build",
+    "prepublishOnly": "npm run typecheck && npm run check:docs && npm run test && npm run build && npm run smoke:stdio",
     "start": "node dist/cli.js"
   },
   "dependencies": {
