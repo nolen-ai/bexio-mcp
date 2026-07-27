@@ -61,7 +61,7 @@ async function commandLogin(config: BexioMcpConfig): Promise<void> {
   }
   const oauth = new BexioOAuth({ clientId: config.clientId, clientSecret: config.clientSecret });
   const store = new FileTokenStore(config.tokenStorePath ?? defaultTokenStorePath(), config.clientId);
-  const apiScopes = config.scopes ?? scopesForGroups(config.groups, config.readOnly);
+  const apiScopes = config.scopes ?? scopesForGroups(config.groups, config.writeMode);
   const scopes = [...new Set([...BASE_OIDC_SCOPES, ...apiScopes])];
 
   err(`Requesting scopes: ${scopes.join(' ')}`);
@@ -128,7 +128,7 @@ async function commandServe(config: BexioMcpConfig, listTools: boolean): Promise
   const server = createBexioMcpServer({
     client,
     groups: config.groups,
-    readOnly: config.readOnly,
+    writeMode: config.writeMode,
   });
 
   await server.connect(new StdioServerTransport());
@@ -149,7 +149,7 @@ async function commandServeHttp(config: BexioMcpConfig): Promise<void> {
     maxSessions: config.httpMaxSessions,
     allowedHosts: config.httpAllowedHosts,
     groups: config.groups,
-    readOnly: config.readOnly,
+    writeMode: config.writeMode,
     clientOptions: {
       baseUrl: config.baseUrl,
       language: config.language,

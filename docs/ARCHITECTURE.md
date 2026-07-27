@@ -71,8 +71,10 @@ Every domain contributes exactly two files. Using `contacts` as the example:
   per endpoint (35 tools instead of 310 keeps the tool list usable for models).
   The description documents every action and the arguments it requires.
 - `writeActions` lists every action that modifies data; `destructiveActions`
-  the irreversible subset (bexio deletes cannot be undone). Read-only mode and
-  MCP annotations are derived from these.
+  the irreversible subset (bexio deletes cannot be undone). The configured
+  write mode (`read-only`, `drafts`, or `full`) and MCP annotations are derived
+  from these. `drafts` additionally checks live quote state before quote or
+  custom-position mutations.
 - Shared schema fragments come from `../registry.js`: `searchCriteriaSchema`,
   `listParamsShape`, `idSchema`. Handlers use `requireArg()` for
   action-dependent arguments and `unknownAction()` in the default branch.

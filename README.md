@@ -4,7 +4,7 @@
 
 - **Complete**: covers all **310 documented operations** of the [bexio API](https://docs.bexio.com/) through 35 well-described MCP tools (enforced by a coverage test against the official OpenAPI spec).
 - **Reusable**: the typed API client is a standalone entry point (`bexio-mcp/client`) with zero MCP dependencies — use it in any Node.js project.
-- **Safe**: opt-in read-only mode, destructive-action annotations, tool-group filtering, and API errors mapped to actionable messages (expired token, missing scope, rate limit) instead of crashes.
+- **Safe**: read-only and conservative draft-only write modes, destructive-action annotations, tool-group filtering, and API errors mapped to actionable messages (expired token, missing scope, rate limit) instead of crashes.
 - **Robust**: automatic retry on rate limits (honouring `RateLimit-Reset`), retries for transient GET failures, request timeouts, typed error hierarchy.
 
 ## Get started in two minutes
@@ -90,8 +90,9 @@ long-running deployment:
    `BEXIO_CLIENT_SECRET` instead of `BEXIO_API_TOKEN`. The server loads the
    stored token and refreshes it automatically.
 
-Requested scopes are derived from the enabled tool groups; write scopes are
-omitted in read-only mode. Override them with `BEXIO_SCOPES` or `--scopes`.
+Requested scopes are derived from the enabled tool groups and write mode.
+Read-only omits separate write scopes; drafts requests only the edit scopes
+needed for its allowlist. Override them with `BEXIO_SCOPES` or `--scopes`.
 
 Use the full GitHub command with `whoami` to verify the authenticated bexio
 user, or `logout` to revoke and remove the stored tokens:
@@ -150,7 +151,8 @@ in your MCP client.
 | `BEXIO_TOKEN_STORE`  | `--token-store` | OAuth token file (default `~/.bexio-mcp/tokens.json`).                      |
 | `BEXIO_NO_BROWSER`   | `--no-browser`  | `login` prints the authorization URL instead of opening a browser.          |
 | `BEXIO_TOOL_GROUPS`  | `--groups`      | Comma-separated groups to enable (default: all). See groups below.          |
-| `BEXIO_READ_ONLY`    | `--read-only`   | `true` disables every write action (create/update/delete/issue/send/…).     |
+| `BEXIO_WRITE_MODE`   | `--write-mode`  | Write policy: `read-only`, `drafts`, or `full` (default: `full`).            |
+| `BEXIO_READ_ONLY`    | `--read-only`   | Compatibility alias that forces `BEXIO_WRITE_MODE=read-only`.               |
 | `BEXIO_LANGUAGE`     | `--language`    | `Accept-Language` for translated fields (e.g. `de`, `fr`, `it`, `en`).      |
 | `BEXIO_BASE_URL`     | `--base-url`    | API host override (default `https://api.bexio.com`).                        |
 | `BEXIO_TIMEOUT_MS`   | `--timeout-ms`  | Per-request timeout in milliseconds (default 30000).                        |
@@ -158,14 +160,30 @@ in your MCP client.
 Add these variables to your MCP client's `env` block or `--env` options. Run
 `npx -y github:nolen-ai/bexio-mcp --help` for every CLI option.
 
-### Read-only mode
+### Write modes
+
+Use `BEXIO_WRITE_MODE` to choose the server-side write policy:
+
+- `read-only` disables every write.
+- `drafts` permits contact create/update, contact-relation create/delete,
+  draft-quote create/update, and custom-position changes on unissued draft
+  quotes. Inline quote positions must also be custom positions. It blocks
+  contact/quote deletion, issue/send/accept/decline, all order/invoice writes,
+  and every other business mutation.
+- `full` exposes every operation allowed by the token (the default for
+  backward compatibility).
 
 ```bash
-BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_READ_ONLY=true \
+BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_WRITE_MODE=drafts \
   npx -y github:nolen-ai/bexio-mcp --list-tools
 ```
 
-Write actions return an explanatory error without touching the API; tools that only write are hidden entirely. Recommended when you want analysis/reporting but no mutations.
+Policy-disabled actions are removed from the advertised action enums and are
+also rejected server-side without touching the API. In `read-only` and
+`drafts`, `save_path` is blocked because it writes to the server filesystem;
+omit it to return a PDF inline.
+`BEXIO_READ_ONLY=true` and `--read-only` remain supported as aliases for
+`read-only`.
 
 ### Tool groups
 
@@ -323,7 +341,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 const server = createBexioMcpServer({
   client: new BexioClient({ token: myToken }),
   groups: ['contacts', 'sales'],
-  readOnly: true,
+  writeMode: 'drafts',
 });
 await server.connect(new StdioServerTransport());
 ```

@@ -88,29 +88,16 @@ jobs:
   npm-publish:
     needs: verify
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22.x
-          cache: npm
+          node-version: 24.x
           registry-url: https://registry.npmjs.org
-      - name: Skip when NPM_TOKEN is not configured
-        id: guard
-        run: |
-          if [ -z "$NPM_TOKEN" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "NPM_TOKEN secret not set — skipping npm publish."
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-      - if: steps.guard.outputs.skip == 'false'
-        run: npm ci
-      - if: steps.guard.outputs.skip == 'false'
-        run: npm run build
-      - if: steps.guard.outputs.skip == 'false'
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --access public

@@ -36,7 +36,8 @@ image and streamable HTTP endpoint at `http://host:8722/mcp`.
 
 Useful options in every setup:
 
-- **Safety**: `BEXIO_READ_ONLY=true` disables all write actions.
+- **Safety**: `BEXIO_WRITE_MODE=read-only` disables all writes;
+  `BEXIO_WRITE_MODE=drafts` permits only contacts and unissued quote drafting.
 - **Smaller toolset**: `BEXIO_TOOL_GROUPS=contacts,sales` loads only the groups you need.
 - **Language**: `BEXIO_LANGUAGE=de|fr|it|en` for translated fields (tax codes etc.).
 - **Scoped authentication**: use the [OAuth app workflow](../../README.md#oauth-app-workflow) instead of a PAT.

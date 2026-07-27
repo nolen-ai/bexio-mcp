@@ -10,6 +10,7 @@ export {
   registerBexioTools,
   allBexioTools,
   TOOL_GROUPS,
+  WRITE_MODES,
 } from './mcp/index.js';
 export type {
   BexioMcpServerOptions,
@@ -19,6 +20,7 @@ export type {
   RegisterToolsOptions,
   ToolGroup,
   ToolResult,
+  WriteMode,
 } from './mcp/registry.js';
 export { defineTool, searchCriteriaSchema, listParamsShape, requireArg, unknownAction, InvalidToolArgumentsError } from './mcp/registry.js';
 export { documentResult } from './mcp/binary.js';
@@ -30,5 +32,5 @@ export type { BexioHttpServerOptions, RunningHttpServer } from './mcp/http-serve
 export { FileTokenStore, defaultTokenStorePath } from './auth/token-store.js';
 export { runLoginFlow, DEFAULT_REDIRECT_URI } from './auth/login.js';
 export type { LoginFlowOptions } from './auth/login.js';
-export { GROUP_SCOPES, scopesForGroups } from './mcp/scopes.js';
+export { DRAFT_WRITE_SCOPES, GROUP_SCOPES, scopesForGroups } from './mcp/scopes.js';
 export { VERSION } from './version.js';

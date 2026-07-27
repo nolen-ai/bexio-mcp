@@ -14,11 +14,12 @@
  * | BEXIO_BASE_URL      | --base-url        | API host override (default https://api.bexio.com)   |
  * | BEXIO_LANGUAGE      | --language        | Accept-Language for translated fields (e.g. "de")   |
  * | BEXIO_TOOL_GROUPS   | --groups          | Comma-separated tool groups to enable (default all) |
+ * | BEXIO_WRITE_MODE    | --write-mode      | read-only, drafts, or full (default full)            |
  * | BEXIO_READ_ONLY     | --read-only       | "true"/"1" disables all write actions               |
  * | BEXIO_TIMEOUT_MS    | --timeout-ms      | Per-request timeout in milliseconds                 |
  */
 import { BexioConfigError } from './client/errors.js';
-import { TOOL_GROUPS, type ToolGroup } from './mcp/registry.js';
+import { TOOL_GROUPS, WRITE_MODES, type ToolGroup, type WriteMode } from './mcp/registry.js';
 
 export type CliCommand = 'serve' | 'serve-http' | 'login' | 'logout' | 'whoami';
 
@@ -38,6 +39,8 @@ export interface BexioMcpConfig {
   baseUrl?: string;
   language?: string;
   groups?: ToolGroup[];
+  writeMode: WriteMode;
+  /** Compatibility projection of writeMode for callers using the old option. */
   readOnly: boolean;
   timeoutMs?: number;
   /** serve-http: bind address (default 127.0.0.1; 0.0.0.0 in containers). */
@@ -65,6 +68,7 @@ type ValueKey =
   | 'baseUrl'
   | 'language'
   | 'groups'
+  | 'writeMode'
   | 'timeoutMs'
   | 'httpHost'
   | 'httpPort'
@@ -84,6 +88,7 @@ const FLAG_TO_KEY: Record<string, ValueKey | SwitchKey> = {
   '--base-url': 'baseUrl',
   '--language': 'language',
   '--groups': 'groups',
+  '--write-mode': 'writeMode',
   '--read-only': 'readOnly',
   '--no-browser': 'noBrowser',
   '--timeout-ms': 'timeoutMs',
@@ -142,6 +147,14 @@ function parseScopes(value: string): string[] {
     .split(/[\s,]+/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
+}
+
+function parseWriteMode(value: string): WriteMode {
+  const mode = value.trim().toLowerCase();
+  if (!(WRITE_MODES as readonly string[]).includes(mode)) {
+    throw new BexioConfigError(`Unknown write mode "${value}". Valid modes: ${WRITE_MODES.join(', ')}`);
+  }
+  return mode as WriteMode;
 }
 
 /** Parses CLI arguments and environment into a config; never exits the process. */
@@ -209,6 +222,12 @@ export function parseCliConfig(argv: readonly string[], env: NodeJS.ProcessEnv):
       if (httpPath === '/healthz') return { error: '"/healthz" is reserved for health checks.' };
     }
     const httpAllowedHostsRaw = values.httpAllowedHosts ?? env.BEXIO_HTTP_ALLOWED_HOSTS;
+    const legacyReadOnly = switches.has('readOnly')
+      ? values.readOnly === undefined || parseBool(values.readOnly)
+      : parseBool(env.BEXIO_READ_ONLY);
+    const writeMode = legacyReadOnly
+      ? 'read-only'
+      : parseWriteMode(values.writeMode ?? env.BEXIO_WRITE_MODE ?? 'full');
     const config: BexioMcpConfig = {
       token: values.token ?? env.BEXIO_API_TOKEN ?? '',
       clientId: values.clientId ?? env.BEXIO_CLIENT_ID,
@@ -237,9 +256,8 @@ export function parseCliConfig(argv: readonly string[], env: NodeJS.ProcessEnv):
       baseUrl: values.baseUrl ?? env.BEXIO_BASE_URL,
       language: values.language ?? env.BEXIO_LANGUAGE,
       groups: groupsRaw !== undefined ? parseGroups(groupsRaw) : undefined,
-      readOnly: switches.has('readOnly')
-        ? values.readOnly === undefined || parseBool(values.readOnly)
-        : parseBool(env.BEXIO_READ_ONLY),
+      writeMode,
+      readOnly: writeMode === 'read-only',
       timeoutMs,
     };
     return { command: command ?? 'serve', config, listTools: switchOn('listTools') };
@@ -290,7 +308,9 @@ HTTP options (serve-http):
 
 Server options:
   --groups <a,b,…>       Tool groups to enable (default: all)
-  --read-only            Disable all write actions (or env BEXIO_READ_ONLY=true)
+  --write-mode <mode>    Write policy: read-only, drafts, or full (default full;
+                         env BEXIO_WRITE_MODE)
+  --read-only            Alias for --write-mode=read-only
   --language <code>      Accept-Language for translated fields, e.g. "de"
   --base-url <url>       API host override
   --timeout-ms <ms>      Per-request timeout

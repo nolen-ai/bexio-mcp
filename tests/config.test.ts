@@ -16,6 +16,7 @@ describe('parseCliConfig', () => {
     expect(parsed.config).toMatchObject({
       token: 'tok',
       groups: ['contacts', 'sales'],
+      writeMode: 'read-only',
       readOnly: true,
       language: 'de',
       timeoutMs: 5000,
@@ -26,7 +27,26 @@ describe('parseCliConfig', () => {
     const parsed = parseCliConfig(['--token', 'cli-tok', '--groups=banking', '--read-only'], {
       BEXIO_API_TOKEN: 'env-tok',
     } as NodeJS.ProcessEnv);
-    expect(parsed.config).toMatchObject({ token: 'cli-tok', groups: ['banking'], readOnly: true });
+    expect(parsed.config).toMatchObject({
+      token: 'cli-tok',
+      groups: ['banking'],
+      writeMode: 'read-only',
+      readOnly: true,
+    });
+  });
+
+  it('parses write modes and keeps --read-only as a compatibility override', () => {
+    expect(parseCliConfig([], { BEXIO_WRITE_MODE: 'drafts' } as NodeJS.ProcessEnv).config).toMatchObject({
+      writeMode: 'drafts',
+      readOnly: false,
+    });
+    expect(parseCliConfig(['--write-mode', 'full'], { BEXIO_WRITE_MODE: 'drafts' } as NodeJS.ProcessEnv).config)
+      .toMatchObject({ writeMode: 'full', readOnly: false });
+    expect(parseCliConfig(['--write-mode', 'full', '--read-only'], noEnv).config).toMatchObject({
+      writeMode: 'read-only',
+      readOnly: true,
+    });
+    expect(parseCliConfig(['--write-mode', 'unsafe'], noEnv).error).toContain('read-only, drafts, full');
   });
 
   it('rejects unknown groups with a helpful message', () => {

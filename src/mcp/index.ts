@@ -49,6 +49,7 @@ export type {
   RegisterToolsOptions,
   ToolGroup,
   ToolResult,
+  WriteMode,
 } from './registry.js';
-export { TOOL_GROUPS } from './registry.js';
+export { TOOL_GROUPS, WRITE_MODES } from './registry.js';
 export { allBexioTools } from './tools/index.js';

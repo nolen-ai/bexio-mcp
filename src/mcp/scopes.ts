@@ -9,7 +9,7 @@
  * - The pseudo-scope `general` that appears on some operations is granted
  *   implicitly and must NOT be requested from the IdP.
  */
-import type { ToolGroup } from './registry.js';
+import type { ToolGroup, WriteMode } from './registry.js';
 
 interface GroupScopes {
   /** Scopes needed for the group's read (GET/search) operations. */
@@ -41,17 +41,33 @@ export const GROUP_SCOPES: Record<ToolGroup, GroupScopes> = {
 };
 
 /**
- * Computes the API scopes to request for a login covering the given tool
- * groups (default: all groups). In read-only mode the write scopes are
- * dropped where a separate read scope exists.
+ * Draft mode deliberately grants only the edit scopes needed by its small
+ * write allowlist. All other group operations remain read-only even when
+ * their write scopes would normally be requested in full mode.
  */
-export function scopesForGroups(groups: readonly ToolGroup[] | undefined, readOnly = false): string[] {
+export const DRAFT_WRITE_SCOPES: Partial<Record<ToolGroup, readonly string[]>> = {
+  contacts: ['contact_edit'],
+  sales: ['kb_offer_edit'],
+};
+
+/**
+ * Computes the API scopes to request for a login covering the given tool
+ * groups (default: all groups). A boolean second argument is retained for
+ * compatibility (`true` means read-only, `false` means full access).
+ */
+export function scopesForGroups(
+  groups: readonly ToolGroup[] | undefined,
+  modeOrReadOnly: WriteMode | boolean = 'full',
+): string[] {
+  const writeMode: WriteMode =
+    typeof modeOrReadOnly === 'boolean' ? (modeOrReadOnly ? 'read-only' : 'full') : modeOrReadOnly;
   const selected = groups && groups.length > 0 ? groups : (Object.keys(GROUP_SCOPES) as ToolGroup[]);
   const result = new Set<string>();
   for (const group of selected) {
     const spec = GROUP_SCOPES[group];
     for (const scope of spec.read) result.add(scope);
-    if (!readOnly) for (const scope of spec.write) result.add(scope);
+    const writeScopes = writeMode === 'full' ? spec.write : writeMode === 'drafts' ? DRAFT_WRITE_SCOPES[group] ?? [] : [];
+    for (const scope of writeScopes) result.add(scope);
   }
   return [...result].sort();
 }

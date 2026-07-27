@@ -362,4 +362,22 @@ describe('scopesForGroups', () => {
     expect(scopesForGroups(undefined)).not.toContain('general');
     expect(scopesForGroups(undefined).length).toBeGreaterThan(15);
   });
+
+  it('requests only the edit scopes used by draft-safe actions', () => {
+    expect(scopesForGroups(['contacts', 'sales'], 'drafts')).toEqual([
+      'contact_edit',
+      'contact_show',
+      'kb_delivery_show',
+      'kb_invoice_show',
+      'kb_offer_edit',
+      'kb_offer_show',
+      'kb_order_show',
+    ]);
+    expect(scopesForGroups(['banking', 'projects'], 'drafts')).toEqual([
+      'bank_account_show',
+      'bank_payment_show',
+      'monitoring_show',
+      'project_show',
+    ]);
+  });
 });

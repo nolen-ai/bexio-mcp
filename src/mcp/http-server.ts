@@ -182,6 +182,7 @@ export function startBexioHttpServer(options: BexioHttpServerOptions = {}): Prom
     const mcpServer = createBexioMcpServer({
       client,
       groups: options.groups,
+      writeMode: options.writeMode,
       readOnly: options.readOnly,
       maxResultChars: options.maxResultChars,
     });
