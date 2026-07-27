@@ -1,6 +1,6 @@
 {
   "name": "bexio-mcp",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "MCP server and typed TypeScript client for the bexio API (Swiss business software): contacts, quotes, orders, invoices, purchase, accounting, banking, items, projects, time tracking, files and payroll.",
   "keywords": [
     "bexio",
