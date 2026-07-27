@@ -1,6 +1,6 @@
 # OpenAI Agents SDK (Python)
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to agents built with the [OpenAI Agents SDK for Python](https://openai.github.io/openai-agents-python/).
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to agents built with the [OpenAI Agents SDK for Python](https://openai.github.io/openai-agents-python/).
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ async def main():
         name="bexio",
         params={
             "command": "npx",
-            "args": ["-y", "github:mydata-ag/bexio-mcp"],
+            "args": ["-y", "github:nolen-ai/bexio-mcp"],
             "env": {"BEXIO_API_TOKEN": os.environ["BEXIO_API_TOKEN"]},
         },
         cache_tools_list=True,
@@ -50,7 +50,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the published image, which serves streamable HTTP at `http://127.0.0.1:8722/mcp` by default (health check: `GET /healthz`). With no token in the container it runs in multi-user mode — each client must send its own bexio token as a Bearer header (anonymous sessions get 401):
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Connect with `MCPServerStreamableHttp`, passing the token per client:
@@ -72,7 +72,7 @@ async with MCPServerStreamableHttp(
 Alternatively, configure a single shared identity on the server and drop the `headers` entry:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

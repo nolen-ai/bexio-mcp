@@ -1,6 +1,6 @@
 # VS Code (GitHub Copilot)
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to GitHub Copilot's agent mode in Visual Studio Code via a `.vscode/mcp.json` file.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to GitHub Copilot's agent mode in Visual Studio Code via a `.vscode/mcp.json` file.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ Create `.vscode/mcp.json` in your workspace. The `inputs` block makes VS Code pr
     "bexio": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "github:mydata-ag/bexio-mcp"],
+      "args": ["-y", "github:nolen-ai/bexio-mcp"],
       "env": {
         "BEXIO_API_TOKEN": "${input:bexio-token}"
       }
@@ -44,7 +44,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the server with Docker (streamable HTTP on port 8722, path `/mcp`). With no token in the container it runs in multi-user mode — each client authenticates per request with its own bexio token:
 
 ```sh
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Point VS Code at it and pass the token as a header:
@@ -74,7 +74,7 @@ Point VS Code at it and pass the token as a header:
 Alternatively, configure a single shared identity on the server and drop the `headers` block from the config:
 
 ```sh
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

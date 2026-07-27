@@ -1,6 +1,6 @@
 # Pydantic AI
 
-Use [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, from a [Pydantic AI](https://pydantic.dev/docs/ai/) agent via its `MCPToolset`.
+Use [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, from a [Pydantic AI](https://pydantic.dev/docs/ai/) agent via its `MCPToolset`.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ from pydantic_ai.mcp import MCPToolset
 bexio = MCPToolset(
     StdioTransport(
         command="npx",
-        args=["-y", "github:mydata-ag/bexio-mcp"],
+        args=["-y", "github:nolen-ai/bexio-mcp"],
         env={"BEXIO_API_TOKEN": os.environ["BEXIO_API_TOKEN"]},
     )
 )
@@ -46,7 +46,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the published Docker image, which serves Streamable HTTP at `/mcp` on port 8722 (health check: `GET /healthz`). With no token in the container it runs in multi-user mode — each client sends its own bexio token per request:
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Point `MCPToolset` at the URL, passing the token as a header:
@@ -67,7 +67,7 @@ agent = Agent("anthropic:claude-sonnet-4-5", toolsets=[bexio])
 Alternatively, configure a single shared identity on the server and connect without headers (`MCPToolset("http://127.0.0.1:8722/mcp")`):
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

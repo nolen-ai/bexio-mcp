@@ -1,6 +1,6 @@
 # Claude Desktop
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to Claude Desktop so Claude can work with your contacts, invoices, projects, and more.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to Claude Desktop so Claude can work with your contacts, invoices, projects, and more.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ Add bexio-mcp under `mcpServers`:
   "mcpServers": {
     "bexio": {
       "command": "npx",
-      "args": ["-y", "github:mydata-ag/bexio-mcp"],
+      "args": ["-y", "github:nolen-ai/bexio-mcp"],
       "env": {
         "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
@@ -42,7 +42,7 @@ Claude Desktop launches servers with a minimal environment, so a bare `"command"
   "mcpServers": {
     "bexio": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "github:mydata-ag/bexio-mcp"],
+      "args": ["/c", "npx", "-y", "github:nolen-ai/bexio-mcp"],
       "env": {
         "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
@@ -60,7 +60,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Claude Desktop can also reach a bexio-mcp instance running as a remote MCP server via **Settings → Connectors → Add → Add custom connector**. The custom-connector UI cannot send per-user `Authorization` headers, so the server needs a shared identity:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

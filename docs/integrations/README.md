@@ -7,7 +7,7 @@ and a [bexio Personal Access Token](https://developer.bexio.com/pat). Your MCP
 client starts the server with:
 
 ```text
-npx -y github:mydata-ag/bexio-mcp
+npx -y github:nolen-ai/bexio-mcp
 ```
 
 There is nothing to clone or install globally. The first start downloads and

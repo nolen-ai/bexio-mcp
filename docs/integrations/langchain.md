@@ -1,6 +1,6 @@
 # LangChain / LangGraph
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to LangChain and LangGraph agents via the `langchain-mcp-adapters` package.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to LangChain and LangGraph agents via the `langchain-mcp-adapters` package.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ async def main():
             "bexio": {
                 "transport": "stdio",
                 "command": "npx",
-                "args": ["-y", "github:mydata-ag/bexio-mcp"],
+                "args": ["-y", "github:nolen-ai/bexio-mcp"],
                 "env": {"BEXIO_API_TOKEN": os.environ["BEXIO_API_TOKEN"]},
             }
         }
@@ -45,7 +45,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the published image, which serves streamable HTTP at `/mcp` on port 8722 (health check: `GET /healthz`). With no token in the container it runs in multi-user mode — each client authenticates per request with its own bexio token via the `Authorization` header (anonymous sessions get 401):
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 ```python
@@ -69,7 +69,7 @@ tools = await client.get_tools()
 Alternatively, configure a single shared identity on the server and drop the `headers` entry:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

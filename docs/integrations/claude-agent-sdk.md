@@ -1,6 +1,6 @@
 # Claude Agent SDK (TypeScript & Python)
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to agents built with Anthropic's [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk) in TypeScript or Python.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to agents built with Anthropic's [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk) in TypeScript or Python.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ for await (const message of query({
     mcpServers: {
       bexio: {
         command: "npx",
-        args: ["-y", "github:mydata-ag/bexio-mcp"],
+        args: ["-y", "github:nolen-ai/bexio-mcp"],
         env: { BEXIO_API_TOKEN: process.env.BEXIO_API_TOKEN },
       },
     },
@@ -50,7 +50,7 @@ async def main():
         mcp_servers={
             "bexio": {
                 "command": "npx",
-                "args": ["-y", "github:mydata-ag/bexio-mcp"],
+                "args": ["-y", "github:nolen-ai/bexio-mcp"],
                 "env": {"BEXIO_API_TOKEN": os.environ["BEXIO_API_TOKEN"]},
             }
         },
@@ -71,7 +71,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the published image (it serves streamable HTTP at `/mcp` on port 8722; `GET /healthz` for health checks). With no token in the container it runs in multi-user mode — each client authenticates per request with its own bexio token:
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Point the Agent SDK at it:
@@ -94,7 +94,7 @@ Python is the same shape via `mcp_servers={"bexio": {"type": "http", "url": ...,
 Alternatively, configure a single shared identity on the server and drop the `headers` entry:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.
@@ -104,7 +104,7 @@ docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BE
 Instead of spawning a subprocess, build the server with a configured client and pass it as an SDK MCP server:
 
 ```typescript
-import { BexioClient, createBexioMcpServer } from "bexio-mcp"; // npm install github:mydata-ag/bexio-mcp
+import { BexioClient, createBexioMcpServer } from "bexio-mcp"; // npm install github:nolen-ai/bexio-mcp
 
 const options = {
   mcpServers: {

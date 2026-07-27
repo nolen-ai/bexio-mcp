@@ -19,7 +19,7 @@ Add the server to Claude Code, replacing `YOUR_BEXIO_TOKEN` with your PAT:
 
 ```bash
 claude mcp add --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
-  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+  --transport stdio bexio -- npx -y github:nolen-ai/bexio-mcp
 ```
 
 Verify the connection:
@@ -31,7 +31,7 @@ claude mcp list
 The result should include:
 
 ```text
-bexio: npx -y github:mydata-ag/bexio-mcp - ✔ Connected
+bexio: npx -y github:nolen-ai/bexio-mcp - ✔ Connected
 ```
 
 The first start downloads and builds the server and can take a few seconds.
@@ -51,7 +51,7 @@ all create, update, send, and delete actions:
 ```bash
 claude mcp add \
   --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_READ_ONLY=true \
-  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+  --transport stdio bexio -- npx -y github:nolen-ai/bexio-mcp
 ```
 
 ### Claude Desktop and other clients
@@ -81,7 +81,7 @@ long-running deployment:
    ```bash
    BEXIO_CLIENT_ID=YOUR_CLIENT_ID \
    BEXIO_CLIENT_SECRET=YOUR_CLIENT_SECRET \
-   npx -y github:mydata-ag/bexio-mcp login
+   npx -y github:nolen-ai/bexio-mcp login
    ```
 
    A browser opens for consent. Tokens are stored in
@@ -98,7 +98,7 @@ user, or `logout` to revoke and remove the stored tokens:
 
 ```bash
 BEXIO_CLIENT_ID=YOUR_CLIENT_ID BEXIO_CLIENT_SECRET=YOUR_CLIENT_SECRET \
-  npx -y github:mydata-ag/bexio-mcp whoami
+  npx -y github:nolen-ai/bexio-mcp whoami
 ```
 
 ## Troubleshooting
@@ -114,7 +114,7 @@ Reset an incorrect Claude Code entry with:
 ```bash
 claude mcp remove bexio
 claude mcp add --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
-  --transport stdio bexio -- npx -y github:mydata-ag/bexio-mcp
+  --transport stdio bexio -- npx -y github:nolen-ai/bexio-mcp
 claude mcp list
 ```
 
@@ -124,14 +124,14 @@ This command should print 35 tools and exit:
 
 ```bash
 BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
-  npx -y github:mydata-ag/bexio-mcp --list-tools
+  npx -y github:nolen-ai/bexio-mcp --list-tools
 ```
 
 Then verify that bexio accepts the token:
 
 ```bash
 BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
-  npx -y github:mydata-ag/bexio-mcp whoami
+  npx -y github:nolen-ai/bexio-mcp whoami
 ```
 
 If tool listing fails, check `node --version` is 18 or newer and read the error
@@ -156,13 +156,13 @@ in your MCP client.
 | `BEXIO_TIMEOUT_MS`   | `--timeout-ms`  | Per-request timeout in milliseconds (default 30000).                        |
 
 Add these variables to your MCP client's `env` block or `--env` options. Run
-`npx -y github:mydata-ag/bexio-mcp --help` for every CLI option.
+`npx -y github:nolen-ai/bexio-mcp --help` for every CLI option.
 
 ### Read-only mode
 
 ```bash
 BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_READ_ONLY=true \
-  npx -y github:mydata-ag/bexio-mcp --list-tools
+  npx -y github:nolen-ai/bexio-mcp --list-tools
 ```
 
 Write actions return an explanatory error without touching the API; tools that only write are hidden entirely. Recommended when you want analysis/reporting but no mutations.
@@ -173,7 +173,7 @@ Write actions return an explanatory error without touching the API; tools that o
 
 ```bash
 BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN BEXIO_TOOL_GROUPS=contacts,sales,items \
-  npx -y github:mydata-ag/bexio-mcp --list-tools
+  npx -y github:nolen-ai/bexio-mcp --list-tools
 ```
 
 ## Tools
@@ -209,7 +209,7 @@ Start the server:
 
 ```bash
 docker run -d --name bexio-mcp -p 8722:8722 \
-  ghcr.io/mydata-ag/bexio-mcp:latest
+  ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Check it:
@@ -235,7 +235,7 @@ docker run -d --name bexio-mcp \
   -p 127.0.0.1:8722:8722 \
   -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN \
   -e BEXIO_HTTP_SHARED_IDENTITY=true \
-  ghcr.io/mydata-ag/bexio-mcp:latest
+  ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Do not expose shared-identity mode to an untrusted network: anyone who can
@@ -255,7 +255,7 @@ docker run -d --name bexio-mcp \
   -e BEXIO_CLIENT_SECRET=YOUR_CLIENT_SECRET \
   -e BEXIO_REFRESH_TOKEN=YOUR_REFRESH_TOKEN \
   -e BEXIO_HTTP_SHARED_IDENTITY=true \
-  ghcr.io/mydata-ag/bexio-mcp:latest
+  ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 For remote deployments, terminate TLS in a reverse proxy: bearer tokens must
@@ -278,7 +278,7 @@ not cross networks over plain HTTP. Behind a proxy, list its public hostname in
 Install directly from GitHub:
 
 ```bash
-npm install github:mydata-ag/bexio-mcp
+npm install github:nolen-ai/bexio-mcp
 ```
 
 The typed client is dependency-free (uses global `fetch`) and importable on its
@@ -341,7 +341,7 @@ With [just](https://github.com/casey/just): `just check` runs the full gate, `ju
 
 ### Releasing
 
-Releases are tag-driven: pushing `vX.Y.Z` triggers the release workflow, which verifies the tag against `package.json`, runs the full gate, pushes the multi-arch Docker image to `ghcr.io/mydata-ag/bexio-mcp` (`latest`, `X.Y`, `X.Y.Z`), creates the GitHub release with generated notes, and publishes to npm when the `NPM_TOKEN` secret is configured.
+Releases are tag-driven: pushing `vX.Y.Z` triggers the release workflow, which verifies the tag against `package.json`, runs the full gate, pushes the multi-arch Docker image to `ghcr.io/nolen-ai/bexio-mcp` (`latest`, `X.Y`, `X.Y.Z`), creates the GitHub release with generated notes, and publishes to npm when the `NPM_TOKEN` secret is configured.
 
 ```bash
 just bump minor   # bump package.json + src/version.ts, commit "Release vX.Y.Z"

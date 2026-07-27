@@ -1,6 +1,6 @@
 # OpenAI Codex CLI
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to OpenAI Codex CLI so Codex can work with your contacts, invoices, projects and more.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to OpenAI Codex CLI so Codex can work with your contacts, invoices, projects and more.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server cover
 Add the server with one command:
 
 ```bash
-codex mcp add bexio --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -- npx -y github:mydata-ag/bexio-mcp
+codex mcp add bexio --env BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -- npx -y github:nolen-ai/bexio-mcp
 ```
 
 Or edit `~/.codex/config.toml` directly:
@@ -21,7 +21,7 @@ Or edit `~/.codex/config.toml` directly:
 ```toml
 [mcp_servers.bexio]
 command = "npx"
-args = ["-y", "github:mydata-ag/bexio-mcp"]
+args = ["-y", "github:nolen-ai/bexio-mcp"]
 
 [mcp_servers.bexio.env]
 BEXIO_API_TOKEN = "YOUR_BEXIO_TOKEN"
@@ -34,7 +34,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the server with Docker (streamable HTTP on port 8722, path `/mcp`). With no token in the container it runs in multi-user mode — each client sends its own bexio token:
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Then point Codex at it in `~/.codex/config.toml`, referencing the token via an environment variable:
@@ -48,7 +48,7 @@ bearer_token_env_var = "BEXIO_API_TOKEN"
 Alternatively, configure a single shared identity on the server; Codex then needs only `url = "http://127.0.0.1:8722/mcp"` with no `bearer_token_env_var`:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

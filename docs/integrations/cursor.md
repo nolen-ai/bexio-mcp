@@ -1,6 +1,6 @@
 # Cursor
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to Cursor so the AI in your editor can work with your bexio contacts, invoices, projects and more.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to Cursor so the AI in your editor can work with your bexio contacts, invoices, projects and more.
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ Cursor reads MCP servers from `~/.cursor/mcp.json` (global, all projects) or `.c
   "mcpServers": {
     "bexio": {
       "command": "npx",
-      "args": ["-y", "github:mydata-ag/bexio-mcp"],
+      "args": ["-y", "github:nolen-ai/bexio-mcp"],
       "env": {
         "BEXIO_API_TOKEN": "YOUR_BEXIO_TOKEN"
       }
@@ -38,7 +38,7 @@ Prefer scoped OAuth over a PAT? Use the [OAuth app workflow](../../README.md#oau
 Run the server with Docker (streamable HTTP transport on port 8722, path `/mcp`). With no token in the container it runs in multi-user mode — each client authenticates per request with its own bexio token:
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 Point Cursor at it in `~/.cursor/mcp.json`:
@@ -61,7 +61,7 @@ Health check: `curl http://127.0.0.1:8722/healthz`.
 Alternatively, configure a single shared identity on the server and drop the `headers` block from the client config:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

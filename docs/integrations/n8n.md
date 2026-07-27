@@ -1,10 +1,10 @@
 # n8n
 
-Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to n8n's **MCP Client Tool** node so your AI Agent workflows can work with bexio contacts, invoices, projects and more. n8n cannot spawn local stdio servers, so you run bexio-mcp as an HTTP server (Docker) and point n8n at its endpoint.
+Connect [bexio-mcp](https://github.com/nolen-ai/bexio-mcp), an MCP server covering all 310 documented bexio API operations via 35 tools, to n8n's **MCP Client Tool** node so your AI Agent workflows can work with bexio contacts, invoices, projects and more. n8n cannot spawn local stdio servers, so you run bexio-mcp as an HTTP server (Docker) and point n8n at its endpoint.
 
 ## Prerequisites
 
-- Docker (to run the published `ghcr.io/mydata-ag/bexio-mcp` image)
+- Docker (to run the published `ghcr.io/nolen-ai/bexio-mcp` image)
 - A bexio Personal Access Token from <https://developer.bexio.com/pat> (full account access, expires after 6 months)
 - n8n (cloud or self-hosted) with an AI Agent workflow — the MCP Client Tool node is built in
 
@@ -15,7 +15,7 @@ Connect [bexio-mcp](https://github.com/mydata-ag/bexio-mcp), an MCP server cover
 Start the server in multi-user mode (no token baked into the container — n8n sends the token per request instead):
 
 ```bash
-docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 8722:8722 ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 The MCP endpoint is now at `http://127.0.0.1:8722/mcp` (streamable HTTP). Check it with `curl http://127.0.0.1:8722/healthz`.
@@ -30,7 +30,7 @@ Networking notes:
 Alternative — shared identity: configure the token on the server itself, so n8n connects without a Bearer credential:
 
 ```bash
-docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/mydata-ag/bexio-mcp:latest
+docker run -d --name bexio-mcp -p 127.0.0.1:8722:8722 -e BEXIO_API_TOKEN=YOUR_BEXIO_TOKEN -e BEXIO_HTTP_SHARED_IDENTITY=true ghcr.io/nolen-ai/bexio-mcp:latest
 ```
 
 > **Warning**: `BEXIO_HTTP_SHARED_IDENTITY=true` serves this bexio account to *every* client that can reach the port, without authentication — keep the port on loopback or a private network.

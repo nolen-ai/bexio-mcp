@@ -15,11 +15,11 @@
   "author": "Matt von Rohr <matt.vonrohr@mydata.ch>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mydata-ag/bexio-mcp.git"
+    "url": "git+https://github.com/nolen-ai/bexio-mcp.git"
   },
-  "homepage": "https://github.com/mydata-ag/bexio-mcp#readme",
+  "homepage": "https://github.com/nolen-ai/bexio-mcp#readme",
   "bugs": {
-    "url": "https://github.com/mydata-ag/bexio-mcp/issues"
+    "url": "https://github.com/nolen-ai/bexio-mcp/issues"
   },
   "type": "module",
   "engines": {
